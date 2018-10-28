@@ -17,7 +17,7 @@ public class function1 extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
                 startActivity(intent);
             }
         });
