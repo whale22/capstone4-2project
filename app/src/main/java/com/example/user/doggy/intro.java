@@ -16,15 +16,15 @@ public class intro extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();//액션바 숨기기
 
-        //3초 후 인트로 액티비티 제거
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable(){
-            @Override
-            public void run(){
-                Intent intent = new Intent(intro.this, MainActivity.class);
-                startActivity(intent);
+                //3초 후 인트로 액티비티 제거
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable(){
+                    @Override
+                    public void run(){
+                        Intent intent = new Intent(intro.this, MainActivity.class);
+                        startActivity(intent);
 
-                finish();
+                        finish();
             }
         }, 3000);
     }

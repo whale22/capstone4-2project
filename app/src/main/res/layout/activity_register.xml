@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".register">
+
+    <ScrollView
+          android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             android:layout_alignParentStart="true"
+             android:layout_alignParentTop="true">
+
+            <LinearLayout
+              android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+       android:orientation="vertical">
+
+                 <EditText
+                    android:id="@+id/idText"
+                  android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                     android:layout_alignParentTop="true"
+                     android:layout_alignStart="@+id/passwordText"
+                   android:layout_marginTop="35dp"
+                     android:ems="10"
+                   android:hint="아이디"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/passwordText"
+                  android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     android:layout_alignStart="@+id/idText"
+                    android:layout_below="@+id/idText"
+                    android:ems="10"
+                     android:hint="비밀번호"
+                    android:inputType="textPassword" />
+
+               <EditText
+                    android:id="@+id/nameText"
+                     android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/idText"
+               android:layout_below="@+id/passwordText"
+               android:ems="10"
+                android:hint="이름"
+                  android:inputType="textPassword" />
+
+               <EditText
+                 android:id="@+id/addressText"
+              android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+               android:layout_alignStart="@+id/idText"
+                 android:layout_alignTop="@+id/passwordText5"
+                    android:ems="10"
+                   android:hint="주소"
+                android:inputType="textPassword" />
+
+               <EditText
+                   android:id="@+id/dognameText"
+                    android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_alignStart="@+id/idText"
+                 android:layout_alignTop="@+id/passwordText5"
+                 android:ems="10"
+                 android:hint="반려견 이름"
+                 android:inputType="textPassword" />
+
+              <EditText
+                    android:id="@+id/ageText"
+                android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:layout_alignStart="@+id/idText"
+                   android:layout_alignTop="@+id/passwordText5"
+                  android:ems="10"
+               android:hint="반려견 나이"
+                 android:inputType="textPassword" />
+
+            <EditText
+            android:id="@+id/sexText"
+                   android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/idText"
+                android:layout_alignTop="@+id/passwordText5"
+              android:ems="10"
+                  android:hint="반려견 성별"
+                android:inputType="textPassword" />
+
+            <EditText
+              android:id="@+id/typeText"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/idText"
+               android:layout_alignTop="@+id/passwordText5"
+                 android:ems="10"
+                android:hint="견종"
+                 android:inputType="textPassword" />
+
+             <EditText
+           android:id="@+id/weightText"
+            android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/idText"
+                 android:layout_alignTop="@+id/passwordText5"
+                    android:ems="10"
+                android:hint="반려견 몸무게"
+                android:inputType="textPassword" />
+
+          <EditText
+             android:id="@+id/sizeText"
+            android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                 android:layout_alignStart="@+id/idText"
+                    android:layout_alignTop="@+id/passwordText5"
+               android:ems="10"
+                android:hint="반려견 크기"
+                  android:inputType="textPassword" />
+
+             <EditText
+               android:id="@+id/characterText"
+                android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignStart="@+id/idText"
+               android:layout_alignTop="@+id/passwordText5"
+               android:ems="10"
+                android:hint="반려견 성격"
+                 android:inputType="textPassword" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+       android:id="@+id/cancelButton"
+     android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+       android:layout_alignParentEnd="true"
+       android:layout_marginEnd="89dp"
+          android:text="취소"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
+
+    <Button
+       android:id="@+id/registerButton"
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+         android:layout_toStartOf="@+id/cancelButton"
+         android:text="회원가입"
+       android:textAppearance="@style/TextAppearance.AppCompat" />
+
+
+    </RelativeLayout>

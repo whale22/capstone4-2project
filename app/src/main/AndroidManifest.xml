@@ -27,7 +27,8 @@
         <activity android:name=".function3" />
         <activity android:name=".MainActivity" />
         <activity android:name=".login" />
-        <activity android:name=".Main2Activity"></activity>
+        <activity android:name=".Main2Activity" />
+        <activity android:name=".register"></activity>
     </application>
 
 </manifest>
