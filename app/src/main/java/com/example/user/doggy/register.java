@@ -24,7 +24,7 @@ public class register extends AppCompatActivity {
         });
 
         Button btn2 = (Button)findViewById(R.id.cancelButton);
-        btn.setOnClickListener(new View.OnClickListener(){
+        btn2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(),login.class);
