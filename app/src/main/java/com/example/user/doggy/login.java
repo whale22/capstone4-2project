@@ -121,17 +121,14 @@ public class login extends AppCompatActivity implements View.OnClickListener  {
             InputStreamReader tmp = new InputStreamReader(http.getInputStream(), "UTF-8");
             BufferedReader reader = new BufferedReader(tmp);
             String str;
-            reader.readLine();
-            reader.readLine();
             str=reader.readLine();
-            if(str==null) bu="false";
-            else bu=str.toString();
+            bu=str.toString();
             Log.d("RESPONSE", "what is bu : "+bu);
             if(bu.equals("\"true\"")){
                 Log.d("RESPONSE", "bu is true");
                 flag=1;
-
             }
+
             else
                 Log.d("RESPONSE", "bu is false");
             Log.d("RESPONSE", "The response4 is: " + bu);
