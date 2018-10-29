@@ -36,41 +36,41 @@
         android:textSize="10pt"/>
 
     <RadioGroup
+        android:id="@+id/radiogroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:id="@+id/radiogroup"
         android:orientation="vertical">
 
         <RadioButton
+            android:id="@+id/radio1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radio1"
             android:text="비매너 주인 신고"
             android:textSize="10pt" />
         <RadioButton
+            android:id="@+id/radio2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radio2"
             android:text="유기 반려견 발견"
             android:textSize="10pt"/>
         <RadioButton
+            android:id="@+id/radio3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radio3"
             android:text="공격적 반려견"
             android:textSize="10pt"/>
         <RadioButton
+            android:id="@+id/radio4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radio4"
             android:text="산책로 청결 상태 불량"
             android:textSize="10pt"/>
         <RadioButton
+            android:id="@+id/radio5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="기타"
-            android:id="@+id/radio5"
+            android:text="기타 제보하기"
             android:textSize="10pt"/>
     </RadioGroup>
     <TextView
@@ -84,8 +84,8 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/etc"
         android:layout_marginLeft="16dp"
+        android:id="@+id/etc"
         android:hint="다른 사용자에게 알릴 메세지를 입력하세요."/>
 
     <RelativeLayout
@@ -93,11 +93,10 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/addalarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/back"
-            android:onClick="createNotification"
+            android:id="@+id/addalarm"
             android:text="알림 추가"/>
 
         <Button

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-tools:context=".MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
 
     <TextView
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:id="@+id/textView1"
-        android:text="@string/ip"
+        android:text=""
         android:layout_marginLeft="80dp"
         android:layout_marginTop="200dp"/>
 
@@ -26,20 +26,20 @@ tools:context=".MainActivity">
         android:hint="" />
 
     <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button1"
-            android:id="@+id/button01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONNECT"
+        android:id="@+id/btn"
         android:layout_marginTop="250dp"
         android:layout_marginLeft="125dp"/>
 
-    <Button
+    <!-- <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button02"
         android:text="NEXT"
         android:layout_marginTop="300dp"
-        android:layout_marginLeft="125dp"/>
+        android:layout_marginLeft="125dp"/> -->
 
 
 

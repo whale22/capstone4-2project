@@ -18,30 +18,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     EditText input01;//전역으로 깔지 않으면 setOnclickLister 안에서 참조가 안됨
+    connectInfo ci = new connectInfo();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button btn = (Button)findViewById(R.id.button02);
-
-        btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), login.class);
-                startActivity(intent);
-            }
-        });
-
+        findViewById(R.id.btn).setOnClickListener(this);
+        Button btn = (Button)findViewById(R.id.btn);
         //버튼과 ip입력칸 등록
-        Button button01 = (Button) findViewById(R.id.button01);
+        //Button button01 = (Button) findViewById(R.id.button01);
         input01 = (EditText)findViewById(R.id.input01);
 
 
         //button01의 클릭 이벤트. 클릭하면 input01에서 ip주소를 받아와 연결한다.
-        button01.setOnClickListener(new View.OnClickListener(){
+        /*button01.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
 
@@ -49,9 +41,19 @@ public class MainActivity extends AppCompatActivity {
                 ConnectTread thread = new ConnectTread(addr);//통신용 스레드 생성
                 thread.start();
             }
-        });
+        });*/
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.btn:
+                ci.setIP(input01.getText().toString());
+                startActivity(new Intent(this, login.class));
+                this.finish();
+        }
     }
 
     class ConnectTread extends Thread{
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         public void run(){
             try{
-                int port = 26420;//이 포트는 서버와 일치해야만 함
+                int port = 36420;//이 포트는 서버와 일치해야만 함
                 Socket sock = new Socket(hostname, port);
 
                 //쓰기 객체를 만들어 보내기
