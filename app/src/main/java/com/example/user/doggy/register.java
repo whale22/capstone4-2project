@@ -47,8 +47,6 @@ public class register extends AppCompatActivity implements OnClickListener {
 
     }
 
-    //서버로 사용자가 입력한 비밀번호를 보내고 php가 판별한 뒤 신호를 보냄
-    //서버가 no를 보냈으면 open 실행불가, yes를 보냈으면 실행가능
 
 
     class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
