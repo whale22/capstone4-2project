@@ -25,10 +25,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-<<<<<<< HEAD
-
-=======
->>>>>>> e99019b396c8c7a80804c5db2203720c7bc062a1
 
     <!-- 구글 서비스 사용권한 -->
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -41,7 +37,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-<<<<<<< HEAD
+
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -52,7 +48,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBxkKOMwfAvMJcegKC6T-DxpH-_vgkI3Kg"
             />
-=======
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -60,7 +55,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBxkKOMwfAvMJcegKC6T-DxpH-_vgkI3Kg" />
->>>>>>> e99019b396c8c7a80804c5db2203720c7bc062a1
 
         <activity android:name=".intro">
             <intent-filter>
@@ -77,9 +71,8 @@
         <activity android:name=".Main2Activity" />
         <activity android:name=".register" />
         <activity android:name=".openMap" />
-<<<<<<< HEAD
 
-=======
+
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
@@ -89,16 +82,15 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
->>>>>>> e99019b396c8c7a80804c5db2203720c7bc062a1
 
-        <activity
+        <!-- activity
             android:name=".MapsActivityTest"
-            android:label="@string/title_activity_maps_test"></activity>
+            android:label="@string/title_activity_maps_test"></activity-->
     </application>
 
 </manifest>
