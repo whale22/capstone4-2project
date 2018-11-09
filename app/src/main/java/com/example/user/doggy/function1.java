@@ -271,13 +271,15 @@ public class function1 extends AppCompatActivity {
             str=reader.readLine();
             bu=str.toString();
             Log.d("RESPONSE", "what is bu : "+bu);
-            if(bu.equals("\"true\"")){
+            if(bu.length()>=5){
                 Log.d("RESPONSE", "bu is true");
                 flag=1;
             }
 
             else
                 Log.d("RESPONSE", "bu is false");
+            //str=reader.readLine();
+            //if(str!=null) bu=str.toString();
             Log.d("RESPONSE", "The response4 is: " + bu);
             http.disconnect();
             while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것 라인단위로 읽는다
