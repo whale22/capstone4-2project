@@ -81,15 +81,24 @@ public class function1 extends AppCompatActivity {
         // 위치 정보를 관리하는 매니저
         LocationManager manager;
 
+        // 현위치 버튼 클릭 경우
         Button btn_mylocation = (Button) findViewById(R.id.btn_mylocation);
         btn_mylocation.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 checkPermission();
                 task = new function1.BackgroundTask();
                 task.execute();
-
             }
         });
+
+        Button btn_map = (Button) findViewById(R.id.map);
+        btn_map.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), openMap.class);
+                startActivity(intent);
+            }
+        });
+
 
         Button btn = (Button) findViewById(R.id.back);
         btn.setOnClickListener(new View.OnClickListener() {
