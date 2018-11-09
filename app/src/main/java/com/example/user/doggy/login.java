@@ -37,6 +37,8 @@ public class login extends AppCompatActivity implements View.OnClickListener  {
         setContentView(R.layout.activity_login);
         findViewById(R.id.loginButton).setOnClickListener(this);
         findViewById(R.id.registerButton).setOnClickListener(this);
+        findViewById(R.id.next).setOnClickListener(this);
+
         //tv= findViewById(R.id.resultText);
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -148,6 +150,9 @@ public class login extends AppCompatActivity implements View.OnClickListener  {
 
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.next:
+                startActivity(new Intent(this,Main2Activity.class));
+                break;
             case R.id.registerButton:
                 startActivity(new Intent(this,register.class));
                 break;
