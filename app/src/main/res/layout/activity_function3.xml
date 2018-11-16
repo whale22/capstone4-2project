@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="100dp"
+        android:id="@+id/register_route"
         android:text="산책로 등록"
         />
     <Button
@@ -37,5 +38,7 @@
         android:layout_marginLeft="80dp"
         android:id="@+id/back"
         android:text="이전 화면"/>
+
+
 
 </LinearLayout>

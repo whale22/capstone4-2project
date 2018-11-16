@@ -11,13 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.user.doggy.Main2Activity;
-import com.example.user.doggy.R;
-import com.example.user.doggy.connectInfo;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -126,9 +121,12 @@ public class login extends AppCompatActivity implements View.OnClickListener  {
             str=reader.readLine();
             bu=str.toString();
             Log.d("RESPONSE", "what is bu : "+bu);
-            if(bu.equals("\"true\"")){
+            if(bu.startsWith("\"true\"")){
                 Log.d("RESPONSE", "bu is true");
                 flag=1;
+                String[] spID=str.split(":");
+                Log.d("RESPONSE", spID[1]);
+                ci.setUserID(spID[1]);
             }
 
             else
@@ -160,6 +158,9 @@ public class login extends AppCompatActivity implements View.OnClickListener  {
                 task = new login.BackgroundTask();
                 task.execute(); // 서버와 자료 주고받기
                 //tv.setText(bu);
+                break;
+            case R.id.ipset:
+                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
     }

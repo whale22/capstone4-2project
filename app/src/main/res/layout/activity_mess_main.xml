@@ -1,125 +1,84 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="start"
-    tools:context=".messMain" >
-
-
-    <Button
-        android:id="@+id/btn_start_server"
-
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-
-        android:layout_centerHorizontal="true"
-
-        android:layout_marginTop="20dp"
-
-        android:onClick="mOnClick"
-
-        android:text="START"
-
-        android:textStyle="bold" />
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/label_message_from_client"
+        android:id="@+id/TextView01"
+        android:layout_width="fill_parent"
+        android:layout_height="321dp" />
 
+
+    <LinearLayout
+
+        android:layout_width="fill_parent"
+
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical">
+
+
+        <RadioGroup
+            android:id="@+id/messRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/mr1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="안녕하세요." />
+
+            <RadioButton
+                android:id="@+id/mr2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="산책 같이 하실래요?" />
+
+            <RadioButton
+                android:id="@+id/mr3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="좋아요" />
+
+            <RadioButton
+                android:id="@+id/mr4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아니요" />
+
+            <RadioButton
+                android:id="@+id/mr5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="도착지점에서 뵐게요" />
+
+            <RadioButton
+                android:id="@+id/mr6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="산책 즐겁게 하세요!" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        android:layout_below="@id/btn_start_server"
+        <Button
+            android:id="@+id/Button01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="보내기" />
 
-        android:layout_alignParentStart="true"
+        <Button
+            android:id="@+id/chatExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="나가기" />
+    </LinearLayout>
 
-        android:layout_marginTop="4dp"
-
-        android:gravity="center"
-
-        android:text="도착한 메세지"
-
-        android:textColor="#000000"
-
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-
-    <TextView
-        android:id="@+id/text_massage_from_client"
-
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-
-
-        android:layout_alignParentStart="true"
-
-        android:layout_marginTop="20dp"
-
-        android:gravity="center"
-        android:text="" />
-
-
-    <TextView
-        android:id="@+id/label_message_to_client"
-
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content"
-
-
-        android:layout_alignParentStart="true"
-
-
-        android:layout_alignParentTop="true"
-
-        android:layout_marginStart="0dp"
-
-
-        android:layout_marginTop="468dp"
-        android:gravity="center"
-        android:text="보낼 메세지를 입력하세요"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-
-    <EditText
-        android:id="@+id/edit_message_to_client"
-
-        android:layout_width="271dp"
-
-        android:layout_height="wrap_content"
-
-
-        android:layout_alignBottom="@+id/btn_send_server"
-
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="11dp"
-        android:gravity="center"
-        android:hint="Enter the message" />
-
-
-    <Button
-        android:id="@+id/btn_send_server"
-
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-
-
-        android:layout_alignParentEnd="true"
-
-        android:layout_marginTop="502dp"
-
-        android:layout_marginEnd="0dp"
-        android:onClick="mOnClick"
-        android:text="SEND" />
-
-
-
-</RelativeLayout>
+</LinearLayout>
 

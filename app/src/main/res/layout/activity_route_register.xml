@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".route_register">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="#6799FF"
+        android:padding="10dp"
+        android:text="경로 등록하기"
+        android:textStyle="bold|italic"
+        android:textSize="15pt"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginLeft="16dp"
+        android:text="경로 이름"
+        android:textStyle="bold"
+        android:textSize="10pt" />
+    <EditText
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:layout_marginLeft="20dp"
+        android:hint="등록할 경로의 이름 입력"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:text="예상 소요시간"
+        android:textStyle="bold"
+        android:textSize="10pt" />
+    <EditText
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/time"
+        android:layout_marginLeft="20dp"
+        android:hint=""/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:text="MEMO"
+        android:textStyle="bold"
+        android:textSize="10pt" />
+    <EditText
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/memo"
+        android:hint=" 이 산책로에 대해 다른 사용자에게 남기고 싶은 말을 자유롭게 적어주세요:)"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/register"
+            android:layout_marginLeft="145dp"
+            android:text="경로 등록"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

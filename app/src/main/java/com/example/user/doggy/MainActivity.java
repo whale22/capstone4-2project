@@ -24,7 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //startActivity(new Intent(this, intro.class));
+        ci.setIP("180.66.202.170:36420"); // 서버 아이피 세팅
+        startActivity(new Intent(this,login.class));
+        finish();
         setContentView(R.layout.activity_main);
         findViewById(R.id.btn).setOnClickListener(this);
         Button btn = (Button)findViewById(R.id.btn);

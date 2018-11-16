@@ -2,23 +2,31 @@ package com.example.user.doggy;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +39,20 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
+import android.support.v4.app.NotificationCompat;
+import android.app.NotificationManager;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 //import com.google.android.gms.location.LocationListener;
 //import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -87,9 +109,18 @@ public class function1 extends AppCompatActivity {
                 checkPermission();
                 task = new function1.BackgroundTask();
                 task.execute();
-
             }
         });
+
+        Button btn_map = (Button) findViewById(R.id.map);
+        btn_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), openMap.class);
+                startActivity(intent);
+            }
+        });
+
 
         Button btn = (Button) findViewById(R.id.back);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +139,10 @@ public class function1 extends AppCompatActivity {
 
 
     }
+
+
+
+
 
     public void checkPermission() {
         boolean isGrant = false;
@@ -149,7 +184,7 @@ public class function1 extends AppCompatActivity {
         int chk2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (chk1 == PackageManager.PERMISSION_GRANTED && chk2 == PackageManager.PERMISSION_GRANTED) {
             myLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            showMyLocation();
+            // showMyLocation();
         }
         // 새롭게 위치를 측정한다.
         GpsListener listener = new GpsListener();
@@ -195,10 +230,52 @@ public class function1 extends AppCompatActivity {
         // 현재 위치값을 추출한다.
         lat = myLocation.getLatitude();
         lng = myLocation.getLongitude();
-
+        Log.d("location", "location"+lat);
         tv_out_mylocation.setText("위도 : " + lat + "\n");
         tv_out_mylocation.append("경도 : " + lng);
     }
+
+    public void pushalarm(String str){
+        NotificationManager notificationManager= (NotificationManager)function1.this.getSystemService(function1.this.NOTIFICATION_SERVICE);
+        Intent intent1 = new Intent(function1.this.getApplicationContext(),function1.class);
+        Notification.Builder builder1 = new Notification.Builder(getApplicationContext());
+
+        intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP| Intent.FLAG_ACTIVITY_CLEAR_TOP);//현재 액티비티를 최상으로 올리고, 최상의 액티비티를 제외한 모든 액티비티없앤다.
+
+        PendingIntent pendingNotificationIntent = PendingIntent.getActivity( function1.this,0, intent1,PendingIntent.FLAG_UPDATE_CURRENT);
+        //PendingIntent는 일회용 인텐트 같은 개념입니다.
+
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),R.drawable.notify);
+        builder1.setLargeIcon(largeIcon);
+
+        builder1.setSmallIcon(R.drawable.notify).setTicker("HETT").setWhen(System.currentTimeMillis())
+                .setContentText(str)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingNotificationIntent).setAutoCancel(true).setOngoing(true);
+
+        notificationManager.notify(1, builder1.build()); // Notification send
+    }
+
+
+    public static void main(String args[])
+    {
+        // 특정 문자가 반복될 경우 : '-' 가 반복된다.
+        String birthday = "2016-11-15";
+
+        // split()을 이용해 '-'를 기준으로 문자열을 자른다.
+        // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
+        String date[] = birthday.split("-");
+
+        for(int i=0 ; i<date.length ; i++)
+        {
+            System.out.println("date["+i+"] : "+date[i]);
+        }
+    }
+
+
+
+
+
+// .setContentTitle("푸쉬 제목")
 
     class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
         protected void onPreExecute() {
@@ -286,16 +363,20 @@ public class function1 extends AppCompatActivity {
                 builder.append(str + "\n");                     // View에 표시하기 위해 라인 구
             }
             res = builder.toString();
-           // ((TextView)(findViewById(R.id.textView2))).setText(res);
+            // ((TextView)(findViewById(R.id.textView2))).setText(res);
+            ci.setAlarm(bu);
 
-            //push 알림
-            Notification.Builder Nbuilder = new Notification.Builder(this);
+            String alarm;
+            alarm  = ci.getAlarm();
+            Log.d("RESPONSE", "what is res : "+res);
 
-            Nbuilder.setSmallIcon(R.mipmap.ic_launcher);
-            Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.notify);
-            Nbuilder.setLargeIcon(largeIcon);
             Log.d("RESPONSE", "what is ci : "+ci.getAlarm());
-            Nbuilder.setContentText(ci.getAlarm());
+
+            if(alarm != NULL){
+                pushalarm(alarm);
+                ci.setAlarm(NULL);
+            }
+
 
 
 
@@ -306,9 +387,6 @@ public class function1 extends AppCompatActivity {
             e.printStackTrace();
             //
         } // try
-
-
-
     } // HttpPostData
 
 
@@ -370,5 +448,4 @@ public class function1 extends AppCompatActivity {
 
 
 }
-
 

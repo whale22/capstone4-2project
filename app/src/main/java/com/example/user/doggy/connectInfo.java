@@ -1,8 +1,9 @@
 package com.example.user.doggy;
 
 public class connectInfo {
-    public static String IP;
-    public static String alarm;
+    private static String IP;
+    private static String alarm;
+    private static String user_ID;
     public void setIP(String IP2){
         IP=IP2;
     }
@@ -14,5 +15,11 @@ public class connectInfo {
     }
     public String getAlarm(){
         return alarm;
+    }
+    public void setUserID(String ui){
+        user_ID=ui;
+    }
+    public String getUserID(){
+        return user_ID;
     }
 }
