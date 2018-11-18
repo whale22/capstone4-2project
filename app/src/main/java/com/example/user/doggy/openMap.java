@@ -3,6 +3,7 @@ package com.example.user.doggy;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,11 +25,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -50,8 +54,11 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 public class openMap extends AppCompatActivity
         implements OnMapReadyCallback,
@@ -84,6 +91,8 @@ public class openMap extends AppCompatActivity
     static double lat = 0;
     static double lng = 0;
 
+    ListView listview;
+
     connectInfo ci = new connectInfo();
     openMap.BackgroundTask task;
 
@@ -106,6 +115,15 @@ public class openMap extends AppCompatActivity
         setContentView(R.layout.activity_openmap);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        // 빈 데이터 리스트 생성.
+        ArrayList<String> items = new ArrayList<String>() ;
+        // ArrayAdapter 생성. 아이템 View를 선택(single choice)가능하도록 만듦.
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items) ;
+
+        // listview 생성 및 adapter 지정.
+        final ListView listview = (ListView) findViewById(R.id.listview1) ;
+        listview.setAdapter(adapter) ;
 
 
 
@@ -133,6 +151,9 @@ public class openMap extends AppCompatActivity
                 task = new openMap.BackgroundTask();
                 task.execute();
 
+                int count;
+                count = adapter.getCount();
+
                 //현위치 비교하여 주변 사람 정보 나타냄
                 // Intent intent = new Intent(getApplicationContext(), matching.class);
                 //startActivity(intent);
@@ -150,6 +171,35 @@ public class openMap extends AppCompatActivity
 
 
     }
+    //리스트뷰 추가하는 함수
+
+    public class List extends ArrayAdapter<String> {
+        private final Activity context;
+        public List(Activity context){
+            super(context, R.layout.activity_openmap);
+            this.context = context;
+        }
+        public void addlist(View v) {
+            // split()을 이용해 '-'를 기준으로 문자열을 자른다.
+            // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
+            String alarm[] = str.split(":");
+
+            int count;
+            count = adapter.getCount();
+
+            for (int i = 0; i < alarm.length; i++) {
+
+                // 아이템 추가.
+                items.add("LIST" + Integer.toString(count + 1));
+                // listview 갱신
+                adapter.notifyDataSetChanged();
+                addNotification(alarm[i], i);
+            }
+        }
+    }
+
+
+
 
     //현재 위치 가져오는 함수
     public void getMyLocation() {
@@ -793,7 +843,21 @@ public class openMap extends AppCompatActivity
             while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것 라인단위로 읽는다
                 builder.append(str + "\n");                     // View에 표시하기 위해 라인 구
             }
+            res = builder.toString();
+            // ((TextView)(findViewById(R.id.textView2))).setText(res);
+            ci.setAlarm(bu);
 
+            String match_id;
+            match_id  = ci.getAlarm();
+            Log.d("RESPONSE", "what is res : "+res);
+
+            Log.d("RESPONSE", "what is ci : "+ci.getAlarm());
+
+            if(match_id != NULL){
+                Log.d("RESPONSE", "what is alarm : "+match_id);
+                addlist(match_id);
+                ci.setAlarm(NULL);
+            }
 
         } catch (MalformedURLException e) {
             Log.d("RESPONSE", "TEX ");
