@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -109,6 +110,7 @@ public class function1 extends AppCompatActivity {
                 checkPermission();
                 task = new function1.BackgroundTask();
                 task.execute();
+                Log.d("latitude", "latitude : "+lat);
             }
         });
 
@@ -184,7 +186,6 @@ public class function1 extends AppCompatActivity {
         int chk2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (chk1 == PackageManager.PERMISSION_GRANTED && chk2 == PackageManager.PERMISSION_GRANTED) {
             myLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            // showMyLocation();
         }
         // 새롭게 위치를 측정한다.
         GpsListener listener = new GpsListener();
@@ -235,24 +236,59 @@ public class function1 extends AppCompatActivity {
         tv_out_mylocation.append("경도 : " + lng);
     }
 
-    public void pushalarm(String str){
+    public void pushalarm(String str) {
+
+        // split()을 이용해 '-'를 기준으로 문자열을 자른다.
+        // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
+        String alarm[] = str.split(":");
+        Log.d("pushalarm", "push" + alarm[0]);
+        Log.d("pushalarm", "push" + str);
+
+        for (int i = 0; i < alarm.length; i++) {
+            Log.d("pushalarm", "push" + alarm[i]);
+            addNotification(alarm[i],i);
+        }
+    }
+
+
+    public void addNotification(String str,int notifyId)
+    {
+
         NotificationManager notificationManager= (NotificationManager)function1.this.getSystemService(function1.this.NOTIFICATION_SERVICE);
+
         Intent intent1 = new Intent(function1.this.getApplicationContext(),function1.class);
+
         Notification.Builder builder1 = new Notification.Builder(getApplicationContext());
+
+
 
         intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP| Intent.FLAG_ACTIVITY_CLEAR_TOP);//현재 액티비티를 최상으로 올리고, 최상의 액티비티를 제외한 모든 액티비티없앤다.
 
+
+
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity( function1.this,0, intent1,PendingIntent.FLAG_UPDATE_CURRENT);
+
         //PendingIntent는 일회용 인텐트 같은 개념입니다.
 
+
+
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),R.drawable.notify);
+
         builder1.setLargeIcon(largeIcon);
 
+
+
         builder1.setSmallIcon(R.drawable.notify).setTicker("HETT").setWhen(System.currentTimeMillis())
+
                 .setContentText(str)
+
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingNotificationIntent).setAutoCancel(true).setOngoing(true);
 
-        notificationManager.notify(1, builder1.build()); // Notification send
+
+
+        notificationManager.notify(notifyId, builder1.build()); // Notification send
+
+
     }
 
 
@@ -263,15 +299,13 @@ public class function1 extends AppCompatActivity {
 
         // split()을 이용해 '-'를 기준으로 문자열을 자른다.
         // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
-        String date[] = birthday.split("-");
+        String date[] = birthday.split(".");
 
         for(int i=0 ; i<date.length ; i++)
         {
             System.out.println("date["+i+"] : "+date[i]);
         }
     }
-
-
 
 
 
@@ -373,6 +407,7 @@ public class function1 extends AppCompatActivity {
             Log.d("RESPONSE", "what is ci : "+ci.getAlarm());
 
             if(alarm != NULL){
+                Log.d("RESPONSE", "what is alarm : "+alarm);
                 pushalarm(alarm);
                 ci.setAlarm(NULL);
             }
