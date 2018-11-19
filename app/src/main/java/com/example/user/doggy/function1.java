@@ -236,16 +236,23 @@ public class function1 extends AppCompatActivity {
         tv_out_mylocation.append("경도 : " + lng);
     }
 
-    public void pushalarm(String str) {
+    public void pushalarm(String str1) {
+        String str;
+        //<br />을 문자열에서 제거한다
+        str = str1.replace("<br />","");
+        Log.d("pushalarm", "push" + str);
 
-        // split()을 이용해 '-'를 기준으로 문자열을 자른다.
+        // split()을 이용해 ':'를 기준으로 문자열을 자른다.
         // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
         String alarm[] = str.split(":");
         Log.d("pushalarm", "push" + alarm[0]);
-        Log.d("pushalarm", "push" + str);
+        //Log.d("pushalarm", "push" + str);
 
         for (int i = 0; i < alarm.length; i++) {
             Log.d("pushalarm", "push" + alarm[i]);
+            if(alarm[i].equals("") ){
+            }
+            else
             addNotification(alarm[i],i);
         }
     }

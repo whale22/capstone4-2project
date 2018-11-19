@@ -24,7 +24,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -90,9 +92,11 @@ public class openMap extends AppCompatActivity
     static int flag=0;
     static double lat = 0;
     static double lng = 0;
-
+    String res, size, color, type, information;   // 서버에서 받아온 값들 넣을 변수
+    String userID;
     ListView listview;
-
+    ArrayList<String> items = new ArrayList<String>() ;
+    ArrayAdapter<String> adapter;
     connectInfo ci = new connectInfo();
     openMap.BackgroundTask task;
 
@@ -117,9 +121,8 @@ public class openMap extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // 빈 데이터 리스트 생성.
-        ArrayList<String> items = new ArrayList<String>() ;
-        // ArrayAdapter 생성. 아이템 View를 선택(single choice)가능하도록 만듦.
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items) ;
+        // ArrayAdapter 생성.
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, items) ;
 
         // listview 생성 및 adapter 지정.
         final ListView listview = (ListView) findViewById(R.id.listview1) ;
@@ -150,16 +153,42 @@ public class openMap extends AppCompatActivity
 
                 task = new openMap.BackgroundTask();
                 task.execute();
+                //listview.setVisibility(View.VISIBLE);
 
-                int count;
-                count = adapter.getCount();
 
                 //현위치 비교하여 주변 사람 정보 나타냄
                 // Intent intent = new Intent(getApplicationContext(), matching.class);
                 //startActivity(intent);
+            }
+        });
+        Button btn2 = (Button) findViewById(R.id.matchbutton);
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int count, checked ;
+                count = adapter.getCount() ;
 
+                if (count > 0) {
+                    // 현재 선택된 아이템의 position 획득.
+                    checked = listview.getCheckedItemPosition();
 
+                    if (checked > -1 && checked < count) {
+                        Intent intent = new Intent(getApplicationContext(), matching.class);
+                        startActivity(intent);
+                    }
+                }
 
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // position이 클릭된 위치입니다.
+                userID = (String) parent.getItemAtPosition(position) ;
+
+                Intent intent = new Intent(getApplicationContext(), matching.class);
+                startActivity(intent);
             }
         });
 
@@ -171,33 +200,25 @@ public class openMap extends AppCompatActivity
 
 
     }
-    //리스트뷰 추가하는 함수
 
-    public class List extends ArrayAdapter<String> {
-        private final Activity context;
-        public List(Activity context){
-            super(context, R.layout.activity_openmap);
-            this.context = context;
-        }
-        public void addlist(View v) {
+    //리스트뷰 추가하는 함수
+        public void addlist(String str) {
             // split()을 이용해 '-'를 기준으로 문자열을 자른다.
             // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
-            String alarm[] = str.split(":");
+            String id[] = str.split(":");
 
-            int count;
-            count = adapter.getCount();
-
-            for (int i = 0; i < alarm.length; i++) {
+            for (int i = 0; i < id.length; i++) {
 
                 // 아이템 추가.
-                items.add("LIST" + Integer.toString(count + 1));
+                items.add(id[i]);
                 // listview 갱신
-                adapter.notifyDataSetChanged();
-                addNotification(alarm[i], i);
+              //  adapter.notifyDataSetChanged();
             }
         }
+ // id를 얻어오는 함수
+    public String getId(){
+        return userID;
     }
-
 
 
 
@@ -791,7 +812,7 @@ public class openMap extends AppCompatActivity
             //   URL 설정하고 접속하기
             //--------------------------
             //.php 수정하기
-            URL url = new URL("http://"+ci.getIP()+"/alarm.php");       // URL 설정
+            URL url = new URL("http://"+ci.getIP()+"/finduser.php");       // URL 설정
             HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
             //--------------------------
             //   전송 모드 설정 - 기본적인 설정이다

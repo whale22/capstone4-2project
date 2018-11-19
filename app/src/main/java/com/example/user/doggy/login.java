@@ -13,15 +13,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
 
-import java.io.*;
-import java.util.*;
-import android.app.*;
-import android.os.Bundle;
 import android.content.*;
 import android.location.*;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -56,7 +50,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         findViewById(R.id.loginButton).setOnClickListener(this);
-        findViewById(R.id.registerButton).setOnClickListener(this);
+        findViewById(R.id.send).setOnClickListener(this);
         findViewById(R.id.next).setOnClickListener(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -261,7 +255,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
             case R.id.next:
                 startActivity(new Intent(this,Main2Activity.class));
                 break;
-            case R.id.registerButton:
+            case R.id.send:
                 startActivity(new Intent(this,register.class));
                 break;
             case R.id.loginButton:
