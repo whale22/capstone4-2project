@@ -47,7 +47,10 @@
         <activity android:name=".register" />
         <activity android:name=".register_map" />
         <activity android:name=".saveAlarm" />
-        <activity android:name=".route_register"></activity>
+        <activity android:name=".route_register" />
+        <activity android:name=".matching" />
+        <activity android:name=".commuContent" />
+        <activity android:name=".community" ></activity>
     </application>
 
 </manifest>

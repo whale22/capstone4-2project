@@ -4,6 +4,7 @@ package com.example.user.doggy;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -93,12 +94,16 @@ public class openMap extends AppCompatActivity
     static double lat = 0;
     static double lng = 0;
     String res, size, color, type, information;   // 서버에서 받아온 값들 넣을 변수
-    String userID;
+    public String userID;
     ListView listview;
     ArrayList<String> items = new ArrayList<String>() ;
     ArrayAdapter<String> adapter;
     connectInfo ci = new connectInfo();
     openMap.BackgroundTask task;
+
+
+    //id pass
+    matching mc = new matching();
 
     //현재 사용자 위치
     Location myLocation;
@@ -121,12 +126,14 @@ public class openMap extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // 빈 데이터 리스트 생성.
-        // ArrayAdapter 생성.
+        items = new ArrayList<String>() ;
+        // ArrayAdapter 생성. 아이템 View를 선택(single choice)가능하도록 만듦.
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, items) ;
 
         // listview 생성 및 adapter 지정.
-        final ListView listview = (ListView) findViewById(R.id.listview1) ;
+        listview = (ListView) findViewById(R.id.listview1) ;
         listview.setAdapter(adapter) ;
+
 
 
 
@@ -140,6 +147,7 @@ public class openMap extends AppCompatActivity
                 .addApi(LocationServices.API)
                 .build();
 
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -161,6 +169,8 @@ public class openMap extends AppCompatActivity
                 //startActivity(intent);
             }
         });
+
+
         Button btn2 = (Button) findViewById(R.id.matchbutton);
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +196,9 @@ public class openMap extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // position이 클릭된 위치입니다.
                 userID = (String) parent.getItemAtPosition(position) ;
-
+                //mc.setId(userID);
+                Log.d("RESPONSE", "what is id : "+userID);
+                ci.setUserID(userID);
                 Intent intent = new Intent(getApplicationContext(), matching.class);
                 startActivity(intent);
             }
@@ -201,24 +213,6 @@ public class openMap extends AppCompatActivity
 
     }
 
-    //리스트뷰 추가하는 함수
-        public void addlist(String str) {
-            // split()을 이용해 '-'를 기준으로 문자열을 자른다.
-            // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
-            String id[] = str.split(":");
-
-            for (int i = 0; i < id.length; i++) {
-
-                // 아이템 추가.
-                items.add(id[i]);
-                // listview 갱신
-              //  adapter.notifyDataSetChanged();
-            }
-        }
- // id를 얻어오는 함수
-    public String getId(){
-        return userID;
-    }
 
 
 
@@ -868,7 +862,7 @@ public class openMap extends AppCompatActivity
             // ((TextView)(findViewById(R.id.textView2))).setText(res);
             ci.setAlarm(bu);
 
-            String match_id;
+            final String match_id;
             match_id  = ci.getAlarm();
             Log.d("RESPONSE", "what is res : "+res);
 
@@ -876,7 +870,24 @@ public class openMap extends AppCompatActivity
 
             if(match_id != NULL){
                 Log.d("RESPONSE", "what is alarm : "+match_id);
-                addlist(match_id);
+                final String id[] = match_id.split(":");
+
+                new Thread(new Runnable() {
+                    @Override public void run() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+
+                                for (int i = 0; i < id.length; i++) {
+
+                                    // listview에 아이템 추가.
+                                    items.add(id[i]);
+                                    // listview 갱신
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+                        });
+                    }}).start();
+
                 ci.setAlarm(NULL);
             }
 
@@ -901,6 +912,7 @@ public class openMap extends AppCompatActivity
 
 
 
-
 }
+
+
 

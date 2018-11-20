@@ -137,7 +137,7 @@ public class register extends AppCompatActivity implements OnClickListener {
             str=reader.readLine();
             bu=str.toString();
             Log.d("RESPONSE", "what is bu : "+bu);
-            if(bu.equals("\"true\"")){
+            if(bu.length()>=5){
                 Log.d("RESPONSE", "bu is true");
                 flag=1;
             }

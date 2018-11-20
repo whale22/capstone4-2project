@@ -40,14 +40,14 @@ import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.N
 
 
 
-public class matching extends openMap {
+public class matching extends AppCompatActivity {
     static String bu;
     static int flag=0;
     int alarm_num;
-    String res,id, name, dogname, dogage, dogsex, dogtype, dogweight, size, dogcharacter;   // 서버에서 받아온 값들 넣을 변수
+    String res, name, dogname, dogage, dogsex, dogtype, dogweight, size, dogcharacter;   // 서버에서 받아온 값들 넣을 변수
     TextView tv;
     connectInfo ci = new connectInfo();
-    openMap om = new openMap();
+    public String id;
     matching.BackgroundTask task;
 
     @Override
@@ -55,6 +55,9 @@ public class matching extends openMap {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
+        id = ci.getUserID();
+        Log.d("RESPONSE", "what is id : "+id);
+
 
         task = new matching.BackgroundTask();
         task.execute();
@@ -69,7 +72,7 @@ public class matching extends openMap {
         });
 
 
-        Button btn = (Button) findViewById(R.id.back);
+        Button btn = (Button) findViewById(R.id.cancelButton);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +83,7 @@ public class matching extends openMap {
 
 
 
-        id = om.getId();
+
 
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -88,43 +91,6 @@ public class matching extends openMap {
 
         }
 
-
-    }
-
-
-
-    public void usercontents(String str) {
-
-        // split()을 이용해 '-'를 기준으로 문자열을 자른다.
-        // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
-        String information[] = str.split(":");
-        Log.d("pushalarm", "push" + information[0]);
-        Log.d("pushalarm", "push" + str);
-
-        final TextView textView1=(TextView)findViewById(R.id.idText);
-        textView1.setText(information[0]);
-        final TextView textView2=(TextView)findViewById(R.id.nameText);
-        textView1.setText(information[1]);
-        final TextView textView3=(TextView)findViewById(R.id.dognameText);
-        textView1.setText(information[2]);
-        final TextView textView4=(TextView)findViewById(R.id.ageText);
-        textView1.setText(information[3]);
-        final TextView textView5=(TextView)findViewById(R.id.sexText);
-        textView1.setText(information[4]);
-        final TextView textView6=(TextView)findViewById(R.id.typeText);
-        textView1.setText(information[5]);
-        final TextView textView7=(TextView)findViewById(R.id.weightText);
-        textView1.setText(information[6]);
-        final TextView textView8=(TextView)findViewById(R.id.idText);
-        textView1.setText(information[7]);
-        final TextView textView9=(TextView)findViewById(R.id.characterText);
-        textView1.setText(information[8]);
-
-
-        for (int i = 0; i < information.length; i++) {
-
-            Log.d("pushalarm", "push" + information[i]);
-        }
 
     }
 
@@ -139,6 +105,9 @@ public class matching extends openMap {
         protected Integer doInBackground(Integer... arg0) {
             // TODO Auto-generated method stub
             try {
+
+
+
                 HttpPostData();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -164,7 +133,7 @@ public class matching extends openMap {
             //--------------------------
             //   URL 설정하고 접속하기
             //--------------------------
-            URL url = new URL("http://"+ci.getIP()+"/alarm.php");       // URL 설정
+            URL url = new URL("http://"+ci.getIP()+"/matchinfo.php");       // URL 설정
             HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
             //--------------------------
             //   전송 모드 설정 - 기본적인 설정이다
@@ -219,7 +188,7 @@ public class matching extends openMap {
             // ((TextView)(findViewById(R.id.textView2))).setText(res);
             ci.setAlarm(bu);
 
-            String alarm;
+            final String alarm;
             alarm  = ci.getAlarm();
             Log.d("RESPONSE", "what is res : "+res);
 
@@ -227,7 +196,47 @@ public class matching extends openMap {
 
             if(alarm != NULL){
                 Log.d("RESPONSE", "what is alarm : "+alarm);
-                usercontents(alarm);
+                final String information[] = alarm.split(":");
+
+                new Thread(new Runnable() {
+                    @Override public void run() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+
+
+
+
+
+                                final TextView textView1=(TextView)findViewById(R.id.idText);
+                                textView1.setText(id);
+                                final TextView textView2=(TextView)findViewById(R.id.nameText);
+                                textView2.setText(information[0]);
+                                final TextView textView3=(TextView)findViewById(R.id.dognameText);
+                                textView3.setText(information[1]);
+                                final TextView textView4=(TextView)findViewById(R.id.ageText);
+                                textView4.setText(information[2]);
+                                final TextView textView5=(TextView)findViewById(R.id.sexText);
+                                textView5.setText(information[3]);
+                                final TextView textView6=(TextView)findViewById(R.id.typeText);
+                                textView6.setText(information[4]);
+                                final TextView textView7=(TextView)findViewById(R.id.weightText);
+                                textView7.setText(information[5]);
+                                final TextView textView8=(TextView)findViewById(R.id.idText);
+                                textView8.setText(information[6]);
+                                final TextView textView9=(TextView)findViewById(R.id.characterText);
+                                textView9.setText(information[7]);
+
+
+
+                            }
+                        });
+                    }}).start();
+
+
+
+
+
+
                 ci.setAlarm(NULL);
             }
 
