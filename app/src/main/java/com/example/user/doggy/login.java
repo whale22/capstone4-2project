@@ -257,7 +257,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                startActivity(new Intent(this,Main2Activity.class));
+                startActivity(new Intent(this,extrafunction.class));
                 break;
             case R.id.send:
                 startActivity(new Intent(this,register.class));
@@ -268,7 +268,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
                 //tv.setText(bu);
                 break;
             case R.id.ipset:
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, extrafunction.class));
                 break;
         }
     }
@@ -277,7 +277,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
         //정보가 있으면 다음으로 아니면 toast
         if(flag==1){
             Toast.makeText(login.this, "로그인이 완료되었습니다!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this,Main2Activity.class));
+            startActivity(new Intent(this,extrafunction.class));
             flag=0;
             this.finish();
         }else{

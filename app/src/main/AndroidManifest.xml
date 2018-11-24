@@ -50,7 +50,9 @@
         <activity android:name=".route_register" />
         <activity android:name=".matching" />
         <activity android:name=".commuContent" />
-        <activity android:name=".community" ></activity>
+        <activity android:name=".community" />
+        <activity
+            android:name=".extrafunction"></activity>
     </application>
 
 </manifest>
