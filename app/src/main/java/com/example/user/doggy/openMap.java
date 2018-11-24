@@ -95,6 +95,7 @@ public class openMap extends AppCompatActivity
     static double lng = 0;
     String res, size, color, type, information;   // 서버에서 받아온 값들 넣을 변수
     public String userID;
+    public  String myID;
     ListView listview;
     ArrayList<String> items = new ArrayList<String>() ;
     ArrayAdapter<String> adapter;
@@ -124,6 +125,8 @@ public class openMap extends AppCompatActivity
         setContentView(R.layout.activity_openmap);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//내 id 가져오기
+        myID = ci.getUserID();
 
         // 빈 데이터 리스트 생성.
         items = new ArrayList<String>() ;
@@ -821,7 +824,7 @@ public class openMap extends AppCompatActivity
             //   서버로 값 전송
             //--------------------------
             StringBuffer buffer = new StringBuffer();
-            //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
+            buffer.append("id").append("=").append(myID).append("&");                 // php 변수에 값 대입
             //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
             buffer.append("latitude").append("=").append((float)lat).append("&");           // 변수 구분은 '&' 사용
             buffer.append("longitude").append("=").append((float)lng);

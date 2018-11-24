@@ -36,6 +36,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
     static int flag=0;
     static double lat = 0;
     static double lng = 0;
+    static String myid;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
@@ -180,6 +181,9 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
             String response = null;
             EditText nameText = (EditText)findViewById(R.id.idText);
             EditText passText = (EditText)findViewById(R.id.passwordText);
+            myid = nameText.getText().toString();
+            ci.setUserID(myid);
+
             //--------------------------
             //   URL 설정하고 접속하기
             //--------------------------
