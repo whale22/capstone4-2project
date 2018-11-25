@@ -299,20 +299,6 @@ public class function1 extends AppCompatActivity {
     }
 
 
-    public static void main(String args[])
-    {
-        // 특정 문자가 반복될 경우 : '-' 가 반복된다.
-        String birthday = "2016-11-15";
-
-        // split()을 이용해 '-'를 기준으로 문자열을 자른다.
-        // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
-        String date[] = birthday.split(".");
-
-        for(int i=0 ; i<date.length ; i++)
-        {
-            System.out.println("date["+i+"] : "+date[i]);
-        }
-    }
 
 
 

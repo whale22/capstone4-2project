@@ -51,8 +51,12 @@
         <activity android:name=".matching" />
         <activity android:name=".commuContent" />
         <activity android:name=".community" />
+        <activity android:name=".adddog" />
+        <activity android:name=".extrafunction" />
         <activity
-            android:name=".extrafunction"></activity>
+            android:name=".usermodify"
+            android:label="@string/title_activity_usermodify"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

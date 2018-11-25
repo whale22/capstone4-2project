@@ -129,13 +129,17 @@ public class extrafunction extends AppCompatActivity
 
         if (id == R.id.nav_userinformation) {
             // 사용자 정보 변경창으로 이동
+            Intent intent = new Intent(getApplicationContext(), usermodify.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_doginformation) {
-            // 반려견 정보 변경창으로 이동
-
+            // 반려견 추가창으로 이동
+            Intent intent = new Intent(getApplicationContext(), adddog.class);
+            startActivity(intent);
         } else if (id == R.id.nav_community) {
             // 커뮤니티 입장
-
+                    Intent intent = new Intent(getApplicationContext(), community.class);
+                    startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
