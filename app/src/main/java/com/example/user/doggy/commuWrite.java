@@ -2,18 +2,14 @@ package com.example.user.doggy;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.api.Response;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,37 +19,29 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Optional;
 
-public class community extends AppCompatActivity {
-    String[] LIST_MENU;
+public class commuWrite extends AppCompatActivity implements View.OnClickListener  {
     static String bu;
-    static int flag = 0;
+    static int flag=0;
     EditText title;
     EditText content;
     connectInfo ci = new connectInfo();
     BackgroundTask task;
-    static int listsize=0;
-    ArrayAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_community);
-        ListView cl = (ListView) findViewById(R.id.commuList);
-        task = new community.BackgroundTask();
-        task.execute(); // 서버와 자료 주고받기
+        setContentView(R.layout.activity_commu_write);
+        findViewById(R.id.commuwrite).setOnClickListener(this);
+        findViewById(R.id.commucancel).setOnClickListener(this);
 
-        Button btn = (Button)findViewById(R.id.addbutton);
-        btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), commuWrite.class);
-                startActivity(intent);
-            }
-        });
+        //tv= findViewById(R.id.resultText);
+        if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
+        }
     }
+
     class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
         protected void onPreExecute() {
         }
@@ -67,23 +55,12 @@ public class community extends AppCompatActivity {
 
         protected void onPostExecute(Integer a) {
             //tv.setText(result);
-            ListView cl = (ListView) findViewById(R.id.commuList);
-            adapter = new ArrayAdapter(community.this, android.R.layout.simple_list_item_1, LIST_MENU);
-            cl.setAdapter(adapter);
-            cl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView parent, View v, int position, long id) {
-                    // get TextView's Text.
-                    String strText = (String) parent.getItemAtPosition(position);
-                    commuContent.titleCon = strText;
-                    startActivity(new Intent(getApplicationContext(), commuContent.class));
-                    Toast.makeText(community.this, strText, Toast.LENGTH_SHORT).show();
-                    // TODO : use strText
-                }
-            });
+            endPass();
         }
 
     }
+
+
 
 
     //------------------------------
@@ -93,14 +70,14 @@ public class community extends AppCompatActivity {
         StringBuilder builder = new StringBuilder();
         try {
 
-            Log.d("RESPONSE", "http://" + ci.getIP() + "/boardlist.php");
+            Log.d("RESPONSE", "http://"+ci.getIP()+"/boardinsert.php");
             String response = null;
-            title = (EditText) findViewById(R.id.titleWrite);
-            content = (EditText) findViewById(R.id.contentWrite);
+            title = (EditText)findViewById(R.id.titleWrite);
+            content = (EditText)findViewById(R.id.contentWrite);
             //--------------------------
             //   URL 설정하고 접속하기
             //--------------------------
-            URL url = new URL("http://" + ci.getIP() + "/boardlist.php");       // URL 설정
+            URL url = new URL("http://"+ci.getIP()+"/boardinsert.php");       // URL 설정
 
             HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
             //--------------------------
@@ -116,28 +93,38 @@ public class community extends AppCompatActivity {
             //   서버로 값 전송
             //--------------------------
 
+            StringBuffer buffer = new StringBuffer();
+            //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
+            //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
+            buffer.append("id").append("=").append(ci.getUserID()).append("&");
+            buffer.append("title").append("=").append(title.getText().toString()).append("&");           // 변수 구분은 '&' 사용
+            buffer.append("content").append("=").append(content.getText().toString());
+
+            Log.d("RESPONSE", "The response2 is: " +buffer.toString());
+            OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "UTF-8");
+            Log.d("RESPONSE", "The response3 is: " +buffer.toString());
+            PrintWriter writer = new PrintWriter(outStream);
+            writer.write(buffer.toString());
+            writer.flush();
+            outStream.close();
+            writer.close();
             //--------------------------
             //   서버에서 전송받기
             //--------------------------
             InputStreamReader tmp = new InputStreamReader(http.getInputStream(), "UTF-8");
             BufferedReader reader = new BufferedReader(tmp);
             String str;
-            str = reader.readLine();
-            Log.d("RESPONSE", "what is bu : " + str);
-            String[] boardInfo;
-            if(str.contains("#")){
-                boardInfo = str.split("#");
-                listsize=boardInfo.length;
-                LIST_MENU = new String[listsize];
-                Log.d("RESPONSE", "what is str : " + boardInfo.length);
-                for (int i = 0; i < boardInfo.length; i++)
-                    LIST_MENU[i] = boardInfo[i].split(";")[1];
-            }else {
-                LIST_MENU = new String[1];
-                Log.d("RESPONSE", "what is str : " + str.split(";")[1]);
-                LIST_MENU[0]=str.split(";")[1];
+            str=reader.readLine();
+            bu=str.toString();
+            Log.d("RESPONSE", "what is bu : "+bu);
+            if(bu.length()>=5){
+                Log.d("RESPONSE", "bu is true");
+                flag=1;
             }
-            Log.d("RESPONSE", "what is bu2 : " + LIST_MENU[0]);
+
+            else
+                Log.d("RESPONSE", "bu is false");
+            Log.d("RESPONSE", "The response4 is: " + bu);
             http.disconnect();
             /*while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것
             이므로 라인단위로 읽는다
@@ -156,7 +143,7 @@ public class community extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.commuwrite:
                 Log.d("RESPONSE", "onclicked");
-                task = new community.BackgroundTask();
+                task = new commuWrite.BackgroundTask();
                 task.execute(); // 서버와 자료 주고받기
                 this.finish();
                 break;
@@ -164,5 +151,16 @@ public class community extends AppCompatActivity {
                 this.finish();
         }
     }
-}
+    public void endPass(){
 
+        //정보가 있으면 다음으로 아니면 toast
+        if(flag==1){
+            Toast.makeText(commuWrite.this, "작성이 완료되었습니다!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this,community.class));
+            flag=0;
+            this.finish();
+        }else{
+            Toast.makeText(commuWrite.this, "작성 실패!", Toast.LENGTH_SHORT).show();
+        }
+    }
+}

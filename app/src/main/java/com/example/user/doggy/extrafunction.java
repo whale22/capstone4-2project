@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import android.content.Intent;
@@ -40,6 +42,9 @@ import android.widget.Button;
 
 public class extrafunction extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    connectInfo ci = new connectInfo();
+    public String myID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,11 @@ public class extrafunction extends AppCompatActivity
                 startActivity(intent);
             }
         });
+        myID = ci.getUserID();
+        Log.d("RESPONSE", "myid " + myID);
 
+        TextView id = findViewById(R.id.UserID);
+        //id.setText(myID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);

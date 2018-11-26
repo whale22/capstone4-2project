@@ -32,17 +32,6 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
     public String myID;
     String res, size, color, type, information;   // 서버에서 받아온 값들 넣을 변수
 
-    EditText user_id = (EditText) findViewById(R.id.idText);
-    EditText user_password = (EditText) findViewById(R.id.passwordText);
-    EditText user_name = (EditText) findViewById(R.id.nameText);
-    EditText user_address = (EditText) findViewById(R.id.addressText);
-    EditText dog_name = (EditText) findViewById(R.id.dognameText);
-    EditText dog_age = (EditText) findViewById(R.id.ageText);
-    EditText dog_sex = (EditText) findViewById(R.id.sexText);
-    EditText dog_type = (EditText) findViewById(R.id.typeText);
-    EditText dog_weight = (EditText) findViewById(R.id.weightText);
-    EditText dog_size = (EditText) findViewById(R.id.sizeText);
-    EditText dog_character = (EditText) findViewById(R.id.characterText);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +80,17 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
     //------------------------------
     public void HttpPostData() {
         StringBuilder builder = new StringBuilder();
+
         try {
 
-            Log.d("RESPONSE", "http://" + ci.getIP() + "/infoinsert.php");
+            Log.d("RESPONSE", "http://" + ci.getIP() + "/showuserinfo.php");
             String response = null;
 
 
             //--------------------------
             //   URL 설정하고 접속하기
             //--------------------------
-            URL url = new URL("http://" + ci.getIP() + "/infoinsert.php");       // URL 설정
+            URL url = new URL("http://" + ci.getIP() + "/showuserinfo.php");       // URL 설정
 
             HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
             //--------------------------
@@ -120,6 +110,7 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
             //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
             //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
             buffer.append("id").append("=").append(myID);
+            Log.d("RESPONSE", "myid " + myID);
 
             Log.d("RESPONSE", "The response2 is: " + buffer.toString());
             OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "UTF-8");
@@ -129,6 +120,18 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
             writer.flush();
             outStream.close();
             writer.close();
+
+            final EditText user_id = (EditText) findViewById(R.id.idText);
+            final EditText user_password = (EditText) findViewById(R.id.passwordText);
+            final EditText user_name = (EditText) findViewById(R.id.nameText);
+            final EditText user_address = (EditText) findViewById(R.id.addressText);
+            final EditText dog_name = (EditText) findViewById(R.id.dognameText);
+            final EditText dog_age = (EditText) findViewById(R.id.ageText);
+            final EditText dog_sex = (EditText) findViewById(R.id.sexText);
+            final EditText dog_type = (EditText) findViewById(R.id.typeText);
+            final EditText dog_weight = (EditText) findViewById(R.id.weightText);
+            final EditText dog_size = (EditText) findViewById(R.id.sizeText);
+            final EditText dog_character = (EditText) findViewById(R.id.characterText);
             //--------------------------
             //   서버에서 전송받기
             //--------------------------
@@ -169,8 +172,6 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
                         runOnUiThread(new Runnable() {
                             public void run() {
 
-                                for (int i = 0; i < information.length; i++) {
-
                                     user_id.setText(myID);
                                     user_password.setText(information[0]);
                                     user_name.setText(information[1]);
@@ -183,7 +184,7 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
                                     dog_size.setText(information[8]);
                                     dog_character.setText(information[9]);
 
-                                }
+
                             }
                         });
                     }
@@ -207,24 +208,12 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
         StringBuilder builder = new StringBuilder();
         try {
 
-            Log.d("RESPONSE", "http://" + ci.getIP() + "/infoinsert.php");
+            Log.d("RESPONSE", "http://" + ci.getIP() + "/updateuserinfo.php");
             String response = null;
-            EditText user_id = (EditText) findViewById(R.id.idText);
-            EditText user_password = (EditText) findViewById(R.id.passwordText);
-            EditText user_name = (EditText) findViewById(R.id.nameText);
-            EditText user_address = (EditText) findViewById(R.id.addressText);
-            EditText dog_name = (EditText) findViewById(R.id.dognameText);
-            EditText dog_age = (EditText) findViewById(R.id.ageText);
-            EditText dog_sex = (EditText) findViewById(R.id.sexText);
-            EditText dog_type = (EditText) findViewById(R.id.typeText);
-            EditText dog_weight = (EditText) findViewById(R.id.weightText);
-            EditText dog_size = (EditText) findViewById(R.id.sizeText);
-            EditText dog_character = (EditText) findViewById(R.id.characterText);
-
             //--------------------------
             //   URL 설정하고 접속하기
             //--------------------------
-            URL url = new URL("http://" + ci.getIP() + "/infoinsert.php");       // URL 설정
+            URL url = new URL("http://" + ci.getIP() + "/updateuserinfo.php");       // URL 설정
 
             HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
             //--------------------------
@@ -239,6 +228,18 @@ public class usermodify extends AppCompatActivity implements OnClickListener {
             //--------------------------
             //   서버로 값 전송
             //--------------------------
+
+            final EditText user_id = (EditText) findViewById(R.id.idText);
+            final EditText user_password = (EditText) findViewById(R.id.passwordText);
+            final EditText user_name = (EditText) findViewById(R.id.nameText);
+            final EditText user_address = (EditText) findViewById(R.id.addressText);
+            final EditText dog_name = (EditText) findViewById(R.id.dognameText);
+            final EditText dog_age = (EditText) findViewById(R.id.ageText);
+            final EditText dog_sex = (EditText) findViewById(R.id.sexText);
+            final EditText dog_type = (EditText) findViewById(R.id.typeText);
+            final EditText dog_weight = (EditText) findViewById(R.id.weightText);
+            final EditText dog_size = (EditText) findViewById(R.id.sizeText);
+            final EditText dog_character = (EditText) findViewById(R.id.characterText);
 
             StringBuffer buffer = new StringBuffer();
             //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입

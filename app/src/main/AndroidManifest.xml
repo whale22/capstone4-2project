@@ -53,6 +53,8 @@
         <activity android:name=".community" />
         <activity android:name=".adddog" />
         <activity android:name=".extrafunction" />
+        <activity android:name=".commuWrite"/>
+        <activity android:name=".commentWrite"/>
         <activity
             android:name=".usermodify"
             android:label="@string/title_activity_usermodify"

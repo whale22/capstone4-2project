@@ -17,6 +17,7 @@ public class connectInfo {
         return alarm;
     }
     public void setUserID(String ui){
+        ui=ui.split("<")[0];
         user_ID=ui;
     }
     public String getUserID(){

@@ -11,14 +11,12 @@
     <TextView
         android:id="@+id/commutitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="커뮤니티 제목" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/commucontent"
         android:layout_width="match_parent"
-        android:layout_height="296dp"
-        android:text="커뮤니티 내용" />
+        android:layout_height="296dp" />
 
     <TextView
         android:id="@+id/ctText"
@@ -26,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="-- 댓 글 란 --" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="177dp"
         android:orientation="vertical">
@@ -34,29 +32,24 @@
         <TextView
             android:id="@+id/commuComment"
             android:layout_width="match_parent"
-            android:layout_height="311dp"
-            android:text="commucomment" />
+            android:layout_height="match_parent" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/ccwbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:text="댓글 작성" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/commuCommentWrite"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textMultiLine" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="댓글 작성" />
 
     </LinearLayout>
 
