@@ -228,7 +228,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
             str=reader.readLine();
             bu=str.toString();
             Log.d("RESPONSE", "what is bu : "+bu);
-            if(bu.startsWith("\"true\"")){
+            if(bu.contains("\"true\"")){
                 Log.d("RESPONSE", "bu is true");
                 flag=1;
                 String[] spID=str.split(":");
