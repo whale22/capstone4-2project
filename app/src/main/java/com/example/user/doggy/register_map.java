@@ -6,27 +6,34 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.user.doggy.R;
+import com.example.user.doggy.connectInfo;
+import com.example.user.doggy.route_register;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -43,7 +50,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -79,8 +93,14 @@ public class register_map extends AppCompatActivity
             .setInterval(UPDATE_INTERVAL_MS)
             .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS);
 
-    TextView tv, tv2;
+    TextView tv, tv3;
     ToggleButton tb;
+    EditText et;
+
+    static String bu;
+    connectInfo ci = new connectInfo();
+    BackgroundTask task;
+    static int flag = 0;
 
 
     @Override
@@ -107,21 +127,23 @@ public class register_map extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        tv = (TextView)findViewById(R.id.textView2);
-        tv2 = (TextView)findViewById(R.id.textView3);
+        tv = (TextView)findViewById(R.id.textView2);//위도
+        tv3 = (TextView)findViewById(R.id.textView4);//경도
         tb = (ToggleButton)findViewById(R.id.toggle1);
+        et = (EditText)findViewById(R.id.et);//경로 이름
 
-        tb.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                if(tb.isChecked()){
-                    tv2.setText("수신중...");
-                }else{
-                    tv2.setText("미수신중...");
-                }
-            }
-        });
+        //Button btn_finish = (Button)findViewById(R.id.btn_finish);
+        //btn_finish.setOnClickListener(new View.OnClickListener(){
+        //    @Override
+        //    public void onClick(View v){
+        //       Intent intent = new Intent(getApplicationContext(),route_register.class);
+        //       startActivity(intent);
+        //   }
 
+        // });
+
+        //task = new register_map.BackgroundTask();
+        // task.execute();
     }
 
 
@@ -257,7 +279,10 @@ public class register_map extends AppCompatActivity
         double longitude = location.getLongitude();
         double latitude = location.getLatitude();
 
-        tv.setText("위도: " + longitude + "\n경도: " + latitude);
+        tv.setText("위도: " + longitude);
+        tv3.setText("경도: " + latitude );
+
+
 
         Log.d(TAG, "onLocationChanged : ");
 
@@ -284,6 +309,27 @@ public class register_map extends AppCompatActivity
         setCurrentLocation(location, markerTitle, markerSnippet);
 
         mCurrentLocatiion = location;
+
+        task = new register_map.BackgroundTask();
+        task.execute();
+
+
+        tb.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(tb.isChecked())
+                {
+                    task = new register_map.BackgroundTask();
+                    task.execute();
+                }
+                else{
+                    Intent intent = new Intent(getApplicationContext(),route_register.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
     }
 
 
@@ -332,7 +378,7 @@ public class register_map extends AppCompatActivity
                 if (hasFineLocationPermission == PackageManager.PERMISSION_DENIED) {
 
                     ActivityCompat.requestPermissions(mActivity,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                             PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
                 } else {
@@ -433,6 +479,7 @@ public class register_map extends AppCompatActivity
         markerOptions.title(markerTitle);
         markerOptions.snippet(markerSnippet);
         markerOptions.draggable(true);
+        //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.basic)));
 
 
         currentMarker = mGoogleMap.addMarker(markerOptions);
@@ -457,7 +504,7 @@ public class register_map extends AppCompatActivity
         //디폴트 위치, Seoul
         LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
         String markerTitle = "위치정보 가져올 수 없음";
-        String markerSnippet = "위치 퍼미션과 GPS 활성 요부 확인하세요";
+        String markerSnippet = "위치 퍼미션과 GPS 활성 여부 확인하세요";
 
 
         if (currentMarker != null) currentMarker.remove();
@@ -545,7 +592,7 @@ public class register_map extends AppCompatActivity
         builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 ActivityCompat.requestPermissions(mActivity,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                         PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         });
@@ -597,7 +644,7 @@ public class register_map extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Intent callGPSSettingIntent
-                        = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE);
             }
         });
@@ -638,6 +685,97 @@ public class register_map extends AppCompatActivity
                 break;
         }
     }
+
+    class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... arg0) {
+            // TODO Auto-generated method stub
+            HttpPostData();
+            return null;
+        }
+
+        protected void onPostExecute(Integer a) {
+        }
+
+    }
+
+
+    //------------------------------
+    //   Http Post로 주고 받기
+    //------------------------------
+    public void HttpPostData() {
+        StringBuilder builder = new StringBuilder();
+
+        try {
+
+            Log.d("RESPONSE", "http://"+ci.getIP()+"/temproute.php");
+            String response = null;
+
+            //--------------------------
+            //   URL 설정하고 접속하기
+            //--------------------------
+            URL url = new URL("http://"+ci.getIP()+"/temproute.php");       // URL 설정
+
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
+            //--------------------------
+            //   전송 모드 설정 - 기본적인 설정이다
+            //--------------------------
+            //http.setDefaultUseCaches(false);
+            http.setDoInput(true);                         // 서버에서 읽기 모드 지정
+            http.setDoOutput(true);                       // 서버로 쓰기 모드 지정
+            http.setRequestMethod("POST");         // 전송 방식은 POST
+
+            StringBuffer buffer = new StringBuffer();
+            //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
+            //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
+            buffer.append("name").append("=").append(et.getText().toString()).append("&");
+            buffer.append("latitude").append("=").append(tv.getText().toString().substring(4)).append("&");
+            buffer.append("longitude").append("=").append(tv3.getText().toString().substring(4));   // 변수 구분은 '&' 사용
+
+            Log.d("RESPONSE", "The response2 is: " +buffer.toString());
+            OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "UTF-8");
+            Log.d("RESPONSE", "The response3 is: " +buffer.toString());
+            PrintWriter writer = new PrintWriter(outStream);
+            writer.write(buffer.toString());
+            writer.flush();
+            outStream.close();
+            writer.close();
+            //--------------------------
+            //   서버에서 전송받기
+            //--------------------------
+            InputStreamReader tmp = new InputStreamReader(http.getInputStream(), "UTF-8");
+            BufferedReader reader = new BufferedReader(tmp);
+            String str;
+            str=reader.readLine();
+            bu=str.toString();
+            Log.d("RESPONSE", "what is bu : "+bu);
+            if(bu.startsWith("\"true\"")){
+                Log.d("RESPONSE", "bu is true");
+                flag=1;
+                String[] spID=str.split(":");
+                Log.d("RESPONSE", spID[1]);
+                ci.setUserID(spID[1]);
+            }
+
+            else
+                Log.d("RESPONSE", "bu is false");
+            Log.d("RESPONSE", "The response4 is: " + bu);
+            http.disconnect();
+            /*while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것
+            이므로 라인단위로 읽는다
+                builder.append(str + "\n");                     // View에 표시하기 위해 라인 구
+            }*/
+        } catch (MalformedURLException e) {
+            Log.d("RESPONSE", "TEX ");
+            //
+        } catch (IOException e) {
+            e.printStackTrace();
+            //
+        } // try
+    } // HttpPostData
 
 
 }

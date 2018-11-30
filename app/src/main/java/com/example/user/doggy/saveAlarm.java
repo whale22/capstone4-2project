@@ -1,5 +1,6 @@
 package com.example.user.doggy;
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -49,6 +50,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.io.BufferedReader;
@@ -86,7 +91,7 @@ import java.net.URL;
 //import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 //import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
-public class saveAlarm extends AppCompatActivity {
+public class saveAlarm extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener  {
     static String bu;
     static int flag = 0;
     TextView tv;
@@ -97,17 +102,11 @@ public class saveAlarm extends AppCompatActivity {
     static double mylocation_x = 0;
     static double mylocation_y = 0;
 
-    String[] permission_list = {
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
 
-    Location myLocation; //현재 사용자 위치
-
-
-    LocationManager manager;//위치 정보를 관리하는 객체 추출
-
-    GoogleMap map;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLocation;
+    private LocationManager locationManager;
+    private LocationRequest mLocationRequest;
 
 
     @Override
@@ -117,23 +116,17 @@ public class saveAlarm extends AppCompatActivity {
 
         findViewById(R.id.etc);
 
-        //체크할 권한 배열
-        String[] permission_list = {
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-        };
-        // 현재 사용자 위치
-        Location myLocation;
-
-        // 위치 정보를 관리하는 매니저
-        LocationManager manager;
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
         Button btn_mylocation = (Button) findViewById(R.id.addalarm);
         btn_mylocation.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                checkPermission();
-                showMyLocation();
                 task = new saveAlarm.BackgroundTask();
                 task.execute();
             }
@@ -159,98 +152,76 @@ public class saveAlarm extends AppCompatActivity {
         }
     }
 
-    public void checkPermission() {
-        boolean isGrant = false;
-        for (String str : permission_list) {
-            if (ContextCompat.checkSelfPermission(this, str) == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                isGrant = false;
-                break;
-            }
-        }
-        if (isGrant == false) {
-            ActivityCompat.requestPermissions(this, permission_list, 0);
-        }
-    }
-
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean isGrant = true;
-        for (int result : grantResults) {
-            if (result == PackageManager.PERMISSION_DENIED) {
-                isGrant = false;
-                break;
-            }
+    public void onConnected(Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        } startLocationUpdates();
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(mLocation == null){
+            startLocationUpdates();
         }
-        // 모든 권한을 허용했다면 사용자 위치를 측정한다.
-        if (isGrant == true) {
-            getMyLocation();
-        }
-    }
-
-    //현재 위치 가져오는 함수
-    public void getMyLocation() {
-        manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        // 권한이 모두 허용되어 있을 때만 동작하도록 한다.
-        int chk1 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int chk2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (chk1 == PackageManager.PERMISSION_GRANTED && chk2 == PackageManager.PERMISSION_GRANTED) {
-            myLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            showMyLocation();
-        }
-        // 새롭게 위치를 측정한다.
-        saveAlarm.GpsListener listener = new saveAlarm.GpsListener();
-
-        if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, listener);
-        }
-        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, listener);
-        }
-
-    }
-
-
-    class GpsListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location location) {
-            // 현재 위치 값을 저장한다.
-            myLocation = location;
-            // 위치 측정을 중단한다.
-            manager.removeUpdates(this);
-            // 지도를 현재 위치로 이동시킨다.
-            showMyLocation();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
+        if (mLocation != null) {
+            mylocation_x = mLocation.getLatitude();
+            mylocation_y = mLocation.getLongitude();
+        } else {
+            // Toast.makeText(this, "Location not Detected", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void showMyLocation() {
-        // LocationManager.GPS_PROVIDER 부분에서 null 값을 가져올 경우를 대비하여 장치
-        if (myLocation == null) {
+    protected void startLocationUpdates() {
+        // Create the location request
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // Request location updates
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        // 현재 위치값을 추출한다.
-        mylocation_x = myLocation.getLatitude();
-        mylocation_y = myLocation.getLongitude();
-        Log.d("RESPONSE", "location : " + mylocation_x);
-
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, this);
+        Log.d("reque", "--->>>>");
     }
 
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
 
-//show 위치
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
 
 
     class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {

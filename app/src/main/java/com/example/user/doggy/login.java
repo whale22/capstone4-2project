@@ -182,7 +182,6 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
             EditText nameText = (EditText)findViewById(R.id.idText);
             EditText passText = (EditText)findViewById(R.id.passwordText);
             myid = nameText.getText().toString();
-            ci.setUserID(myid);
 
             //--------------------------
             //   URL 설정하고 접속하기
@@ -278,6 +277,7 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
         if(flag==1){
             Toast.makeText(login.this, "로그인이 완료되었습니다!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this,extrafunction.class));
+            ci.setUserID(myid);
             flag=0;
             this.finish();
         }else{

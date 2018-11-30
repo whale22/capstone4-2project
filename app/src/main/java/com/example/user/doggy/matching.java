@@ -203,10 +203,6 @@ public class matching extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             public void run() {
 
-
-
-
-
                                 final TextView textView1=(TextView)findViewById(R.id.idText);
                                 textView1.setText(id);
                                 final TextView textView2=(TextView)findViewById(R.id.nameText);

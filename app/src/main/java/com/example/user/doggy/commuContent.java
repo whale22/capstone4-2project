@@ -132,6 +132,7 @@ public class commuContent extends AppCompatActivity implements View.OnClickListe
                             }
                             comment.append(com.split(";")[0] + " : " + com.split(";")[1] + " " + com.split(";")[2]);
                         } else {
+                            content.setText(str.split("&")[0] + "\n" + str.split("&")[1]);
                             comment.setText("작성된 댓글이 없습니다.");
                         }
                     }
