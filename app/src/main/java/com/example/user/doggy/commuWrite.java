@@ -117,7 +117,7 @@ public class commuWrite extends AppCompatActivity implements View.OnClickListene
             str=reader.readLine();
             bu=str.toString();
             Log.d("RESPONSE", "what is bu : "+bu);
-            if(bu.startsWith("true")){
+            if(bu.length()>=5){
                 Log.d("RESPONSE", "bu is true");
                 flag=1;
             }
@@ -156,7 +156,7 @@ public class commuWrite extends AppCompatActivity implements View.OnClickListene
         //정보가 있으면 다음으로 아니면 toast
         if(flag==1){
             Toast.makeText(commuWrite.this, "작성이 완료되었습니다!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this,Main2Activity.class));
+            startActivity(new Intent(this,community.class));
             flag=0;
             this.finish();
         }else{

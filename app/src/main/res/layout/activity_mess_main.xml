@@ -1,94 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+    <LinearLayout android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <TextView
-            android:id="@+id/output"
-            android:layout_height="286dp"
-            android:layout_width="fill_parent"/>
+    <LinearLayout android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
 
-        <RadioGroup
-            android:id="@+id/messRadio"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/mr1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="안녕하세요." />
-
-            <RadioButton
-                android:id="@+id/mr2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="산책 같이 하실래요?" />
-
-            <RadioButton
-                android:id="@+id/mr3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="좋아요." />
-
-            <RadioButton
-                android:id="@+id/mr4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="아니요." />
-
-            <RadioButton
-                android:id="@+id/mr5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="도착지점에서 뵐게요." />
-
-            <RadioButton
-                android:id="@+id/mr6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="산책 즐겁게 하세요!" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/buttonsend"
-
-                android:layout_width="196dp"
-
-                android:layout_height="wrap_content"
-
-                android:text="전송" />
-            <Button
-                android:id="@+id/exitsend"
-
-                android:layout_width="fill_parent"
-
-                android:layout_height="wrap_content"
-
-                android:text="나가기" />
-        </LinearLayout>
+    <TextView android:layout_height="286dp" android:layout_width="fill_parent" android:id="@+id/output"/>
 
 
+    -<RadioGroup android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/messRadio" android:scrollbars="vertical">
 
-    </LinearLayout>
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/mr1" android:text="안녕하세요." android:layout_weight="1"/>
+
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/mr2" android:text="산책 같이 하실래요?" android:layout_weight="1"/>
+
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/mr3" android:text="좋아요." android:layout_weight="1"/>
+
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/mr4" android:text="아니요." android:layout_weight="1"/>
+
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/mr5" android:text="도착지점에서 뵐게요." android:layout_weight="1"/>
+
+    <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/mr6" android:text="산책 즐겁게 하세요!" android:layout_weight="1"/>
+
+</RadioGroup>
+
+
+    -<LinearLayout android:orientation="horizontal" android:layout_height="match_parent" android:layout_width="match_parent">
+
+    <Button android:layout_height="wrap_content" android:layout_width="196dp" android:id="@+id/buttonsend" android:text="전송"/>
+
+    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/exitsend" android:text="나가기"/>
 
 </LinearLayout>
 
+</LinearLayout>
+
+</LinearLayout>

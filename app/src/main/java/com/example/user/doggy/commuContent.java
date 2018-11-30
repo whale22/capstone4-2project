@@ -117,7 +117,6 @@ public class commuContent extends AppCompatActivity implements View.OnClickListe
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         String boardInfo;
                         if (str.contains("%")) {
                             boardInfo = str.split("%")[0];

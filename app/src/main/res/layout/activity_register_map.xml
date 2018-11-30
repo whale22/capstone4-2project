@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,16 +11,24 @@
         android:layout_height="wrap_content"
         android:text="GPS 에 수신된 현재위치" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"/>
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="결과창" />
+        />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="경로 이름"
+        android:id="@+id/et"/>
 
     <ToggleButton
         android:id="@+id/toggle1"
@@ -29,6 +36,8 @@
         android:layout_height="wrap_content"
         android:textOff="산책로등록 시작"
         android:textOn="산책로등록 종료"/>
+
+
 
     <fragment
         android:id="@+id/map"

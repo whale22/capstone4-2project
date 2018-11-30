@@ -3,7 +3,7 @@ package com.example.user.doggy;
 public class connectInfo {
     private static String IP;
     private static String alarm;
-    private static String user_ID;
+    private static String user_ID=null;
     public void setIP(String IP2){
         IP=IP2;
     }
@@ -17,6 +17,7 @@ public class connectInfo {
         return alarm;
     }
     public void setUserID(String ui){
+        ui=ui.split("<")[0];
         user_ID=ui;
     }
     public String getUserID(){

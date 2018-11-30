@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,15 +15,11 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class register extends AppCompatActivity implements OnClickListener {
     static String bu;
@@ -37,7 +32,7 @@ public class register extends AppCompatActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         findViewById(R.id.cancelButton).setOnClickListener(this);
-        findViewById(R.id.registerButton).setOnClickListener(this);
+        findViewById(R.id.send).setOnClickListener(this);
         //tv= findViewById(R.id.resultText);
         if (android.os.Build.VERSION.SDK_INT > 9) { //oncreate 에서 바로 쓰레드돌릴려고 임시방편으로 넣어둔소스
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -142,7 +137,7 @@ public class register extends AppCompatActivity implements OnClickListener {
             str=reader.readLine();
             bu=str.toString();
             Log.d("RESPONSE", "what is bu : "+bu);
-            if(bu.equals("\"true\"")){
+            if(bu.length()>=5){
                 Log.d("RESPONSE", "bu is true");
                 flag=1;
             }
@@ -169,7 +164,7 @@ public class register extends AppCompatActivity implements OnClickListener {
             case R.id.cancelButton:
                 startActivity(new Intent(this,login.class));
                 break;
-            case R.id.registerButton:
+            case R.id.send:
                 task = new register.BackgroundTask();
                 task.execute(); // 서버와 자료 주고받기
                 //tv.setText(bu);

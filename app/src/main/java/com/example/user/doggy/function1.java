@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,6 +30,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.io.BufferedReader;
@@ -60,7 +65,7 @@ import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.N
 
 
 
-public class function1 extends AppCompatActivity {
+public class function1 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener  {
     static String bu;
     static int flag=0;
     static double lat = 0;
@@ -71,18 +76,10 @@ public class function1 extends AppCompatActivity {
     connectInfo ci = new connectInfo();
     function1.BackgroundTask task;
 
-    String[] permission_list = {
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
-
-    Location myLocation; //현재 사용자 위치
-
-    TextView tv_out_mylocation;
-
-    LocationManager manager;//위치 정보를 관리하는 객체 추출
-
-    GoogleMap map;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLocation;
+    private LocationManager locationManager;
+    private LocationRequest mLocationRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +87,15 @@ public class function1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_function1);
 
-        //체크할 권한 배열
-        String[] permission_list = {
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-        };
-        // 현재 사용자 위치
-        Location myLocation;
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        tv_out_mylocation = (TextView) findViewById(R.id.tv_out_mylocation);
+
+        final TextView tv_out_mylocation = (TextView) findViewById(R.id.tv_out_mylocation);
 
         // 위치 정보를 관리하는 매니저
         LocationManager manager;
@@ -106,9 +103,11 @@ public class function1 extends AppCompatActivity {
         Button btn_mylocation = (Button) findViewById(R.id.btn_mylocation);
         btn_mylocation.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                checkPermission();
                 task = new function1.BackgroundTask();
                 task.execute();
+                tv_out_mylocation.setText("위도 : " + lat + "\n");
+                tv_out_mylocation.append("경도 : " + lng);
+                Log.d("latitude", "latitude : "+lat);
             }
         });
 
@@ -137,138 +136,152 @@ public class function1 extends AppCompatActivity {
 
         }
 
-
     }
 
 
-
-
-
-    public void checkPermission() {
-        boolean isGrant = false;
-        for (String str : permission_list) {
-            if (ContextCompat.checkSelfPermission(this, str) == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                isGrant = false;
-                break;
-            }
-        }
-        if (isGrant == false) {
-            ActivityCompat.requestPermissions(this, permission_list, 0);
-        }
-    }
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean isGrant = true;
-        for (int result : grantResults) {
-            if (result == PackageManager.PERMISSION_DENIED) {
-                isGrant = false;
-                break;
-            }
+    public void onConnected(Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        } startLocationUpdates();
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(mLocation == null){
+            startLocationUpdates();
         }
-        // 모든 권한을 허용했다면 사용자 위치를 측정한다.
-        if (isGrant == true) {
-            getMyLocation();
-        }
-    }
-
-
-    //현재 위치 가져오는 함수
-    public void getMyLocation() {
-        manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        // 권한이 모두 허용되어 있을 때만 동작하도록 한다.
-        int chk1 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int chk2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (chk1 == PackageManager.PERMISSION_GRANTED && chk2 == PackageManager.PERMISSION_GRANTED) {
-            myLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            // showMyLocation();
-        }
-        // 새롭게 위치를 측정한다.
-        GpsListener listener = new GpsListener();
-
-        if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, listener);
-        }
-        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, listener);
-        }
-
-    }
-
-    class GpsListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location location) {
-            // 현재 위치 값을 저장한다.
-            myLocation = location;
-            // 위치 측정을 중단한다.
-            manager.removeUpdates(this);
-            // 지도를 현재 위치로 이동시킨다.
-            showMyLocation();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
+        if (mLocation != null) {
+            lat = mLocation.getLatitude();
+            lng = mLocation.getLongitude();
+        } else {
+            // Toast.makeText(this, "Location not Detected", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void showMyLocation() {
-        // LocationManager.GPS_PROVIDER 부분에서 null 값을 가져올 경우를 대비하여 장치
-        if (myLocation == null) {
+    protected void startLocationUpdates() {
+        // Create the location request
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // Request location updates
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        // 현재 위치값을 추출한다.
-        lat = myLocation.getLatitude();
-        lng = myLocation.getLongitude();
-        Log.d("location", "location"+lat);
-        tv_out_mylocation.setText("위도 : " + lat + "\n");
-        tv_out_mylocation.append("경도 : " + lng);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, this);
+        Log.d("reque", "--->>>>");
     }
 
-    public void pushalarm(String str){
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+// 비어있을때 푸쉬알림 안뜨게
+    public void pushalarm(String str1) {
+        String str;
+        //<br />을 문자열에서 제거한다
+        str = str1.replace("<br />","");
+        Log.d("pushalarm", "push" + str+"push");
+        String string1= "";
+        if(str.equals(string1)) {
+
+        } else{
+            // split()을 이용해 ':'를 기준으로 문자열을 자른다.
+            // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
+            String alarm[] = str.split(":");
+            Log.d("pushalarm", "push" + alarm[0]);
+            //Log.d("pushalarm", "push" + str);
+            String temp;
+            for (int i = 0; i < alarm.length; i++) {
+                Log.d("pushalarm", "array push" + alarm[i]+"push");
+                temp = alarm[i];
+                temp.substring(1);
+                if (temp.equals("")) {
+                    Log.d("null", "null" + alarm[i]+"push");
+
+                } else {
+                    addNotification(alarm[i], i);
+                    Log.d("null", "not null" + alarm[i] + "push");
+                }
+            }
+            }
+
+    }
+
+
+    public void addNotification(String str,int notifyId)
+    {
+
         NotificationManager notificationManager= (NotificationManager)function1.this.getSystemService(function1.this.NOTIFICATION_SERVICE);
+
         Intent intent1 = new Intent(function1.this.getApplicationContext(),function1.class);
+
         Notification.Builder builder1 = new Notification.Builder(getApplicationContext());
+
+
 
         intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP| Intent.FLAG_ACTIVITY_CLEAR_TOP);//현재 액티비티를 최상으로 올리고, 최상의 액티비티를 제외한 모든 액티비티없앤다.
 
+
+
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity( function1.this,0, intent1,PendingIntent.FLAG_UPDATE_CURRENT);
+
         //PendingIntent는 일회용 인텐트 같은 개념입니다.
 
+
+
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),R.drawable.notify);
+
         builder1.setLargeIcon(largeIcon);
 
+
+
         builder1.setSmallIcon(R.drawable.notify).setTicker("HETT").setWhen(System.currentTimeMillis())
+
                 .setContentText(str)
+
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingNotificationIntent).setAutoCancel(true).setOngoing(true);
 
-        notificationManager.notify(1, builder1.build()); // Notification send
-    }
 
 
-    public static void main(String args[])
-    {
-        // 특정 문자가 반복될 경우 : '-' 가 반복된다.
-        String birthday = "2016-11-15";
+        notificationManager.notify(notifyId, builder1.build()); // Notification send
 
-        // split()을 이용해 '-'를 기준으로 문자열을 자른다.
-        // split()은 지정한 문자를 기준으로 문자열을 잘라 배열로 반환한다.
-        String date[] = birthday.split("-");
 
-        for(int i=0 ; i<date.length ; i++)
-        {
-            System.out.println("date["+i+"] : "+date[i]);
-        }
     }
 
 
@@ -373,6 +386,7 @@ public class function1 extends AppCompatActivity {
             Log.d("RESPONSE", "what is ci : "+ci.getAlarm());
 
             if(alarm != NULL){
+                Log.d("RESPONSE", "what is alarm : "+alarm);
                 pushalarm(alarm);
                 ci.setAlarm(NULL);
             }
@@ -389,61 +403,6 @@ public class function1 extends AppCompatActivity {
         } // try
     } // HttpPostData
 
-
-
-
-
-
-
-/*
-    public void alarm(int alarm_num) throws ExecutionException, InterruptedException {
-        Notification.Builder builder = new Notification.Builder(this);
-
-
-        switch (alarm_num) {
-            case 1:
-                builder.setSmallIcon(R.mipmap.ic_launcher);
-                Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.notify);
-                builder.setLargeIcon(largeIcon);
-                builder.setContentTitle("신고");
-                builder.setContentText("근처에 비매너 행동을 하는 주인이 있습니다.");
-                break;
-
-            case 2:
-                builder.setSmallIcon(R.mipmap.ic_launcher);
-                builder.setContentTitle("산책로 청결 불량");
-                builder.setContentText("현재 산책로의 청결 상태가 좋지 않습니다.");
-                break;
-
-            case 3:
-                builder.setSmallIcon(R.mipmap.ic_launcher);
-                Bitmap largeIcon2 = BitmapFactory.decodeResource(getResources(), R.drawable.caution);
-                builder.setLargeIcon(largeIcon2);
-                builder.setContentTitle("주의");
-                builder.setContentText("근처에 공격형 반려견이 있습니다. 조심하세요.");
-                break;
-
-            case 4:
-                builder.setSmallIcon(R.mipmap.ic_launcher);
-                builder.setContentTitle("유기견 발견");
-                builder.setContentText("근처에"+size+" "+color+" 의 "+type+" 종의 유기 반려견이 있는 것으로 추정됩니다.");
-                break;
-
-            case 5:
-                builder.setSmallIcon(R.mipmap.ic_launcher);
-                Bitmap largeIcon3 = BitmapFactory.decodeResource(getResources(), R.drawable.etc);
-                builder.setLargeIcon(largeIcon3);
-                builder.setContentTitle("기타 제보 알림");
-                builder.setContentText(information);
-             //   Log.d("RESPONSE", "what is ci : " + ci.getAlarm());
-            //    builder.setContentText(ci.getAlarm());
-                break;
-        }
-
-
-    }
-
-*/
 
 
 

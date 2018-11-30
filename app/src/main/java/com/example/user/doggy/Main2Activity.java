@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import com.google.android.gms.maps.GoogleMap;
 
-public class Main2Activity extends AppCompatActivity {
+public class Main2Activity extends AppCompatActivity  {
 
 
     @Override

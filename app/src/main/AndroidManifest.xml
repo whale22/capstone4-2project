@@ -27,7 +27,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB8yaa16Ar1vNb5D1vKPYP2mXhoIfHAyR8" />
+            android:value="AIzaSyBxkKOMwfAvMJcegKC6T-DxpH-_vgkI3Kg" />
 
         <activity android:name=".intro">
             <intent-filter>
@@ -47,7 +47,18 @@
         <activity android:name=".register" />
         <activity android:name=".register_map" />
         <activity android:name=".saveAlarm" />
-        <activity android:name=".route_register"></activity>
+        <activity android:name=".route_register" />
+        <activity android:name=".matching" />
+        <activity android:name=".commuContent" />
+        <activity android:name=".community" />
+        <activity android:name=".adddog" />
+        <activity android:name=".extrafunction" />
+        <activity android:name=".commuWrite"/>
+        <activity android:name=".commentWrite"/>
+        <activity
+            android:name=".usermodify"
+            android:label="@string/title_activity_usermodify"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

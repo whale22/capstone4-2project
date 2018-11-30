@@ -3,9 +3,12 @@ package com.example.user.doggy;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -23,12 +26,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -41,6 +49,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,8 +59,11 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 public class openMap extends AppCompatActivity
         implements OnMapReadyCallback,
@@ -83,9 +95,18 @@ public class openMap extends AppCompatActivity
     static int flag=0;
     static double lat = 0;
     static double lng = 0;
-
+    String res, size, color, type, information;   // 서버에서 받아온 값들 넣을 변수
+    public String userID;
+    public  String myID;
+    ListView listview;
+    ArrayList<String> items = new ArrayList<String>() ;
+    ArrayAdapter<String> adapter;
     connectInfo ci = new connectInfo();
     openMap.BackgroundTask task;
+
+
+    //id pass
+    matching mc = new matching();
 
     //현재 사용자 위치
     Location myLocation;
@@ -106,6 +127,18 @@ public class openMap extends AppCompatActivity
         setContentView(R.layout.activity_openmap);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//내 id 가져오기
+        myID = ci.getUserID();
+
+        // 빈 데이터 리스트 생성.
+        items = new ArrayList<String>() ;
+        // ArrayAdapter 생성. 아이템 View를 선택(single choice)가능하도록 만듦.
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, items) ;
+
+        // listview 생성 및 adapter 지정.
+        listview = (ListView) findViewById(R.id.listview1) ;
+        listview.setAdapter(adapter) ;
+
 
 
 
@@ -119,6 +152,7 @@ public class openMap extends AppCompatActivity
                 .addApi(LocationServices.API)
                 .build();
 
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -128,17 +162,46 @@ public class openMap extends AppCompatActivity
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMyLocation();
+                //getMyLocation();
 
                 task = new openMap.BackgroundTask();
                 task.execute();
+                //listview.setVisibility(View.VISIBLE);
 
-                //현위치 비교하여 주변 사람 정보 나타냄
-                // Intent intent = new Intent(getApplicationContext(), matching.class);
-                //startActivity(intent);
+            }
+        });
 
 
+        Button btn2 = (Button) findViewById(R.id.matchbutton);
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int count, checked ;
+                count = adapter.getCount() ;
 
+                if (count > 0) {
+                    // 현재 선택된 아이템의 position 획득.
+                    checked = listview.getCheckedItemPosition();
+
+                    if (checked > -1 && checked < count) {
+                        Intent intent = new Intent(getApplicationContext(), matching.class);
+                        startActivity(intent);
+                    }
+                }
+
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // position이 클릭된 위치입니다.
+                userID = (String) parent.getItemAtPosition(position) ;
+                //mc.setId(userID);
+                Log.d("RESPONSE", "what is id : "+userID);
+                //ci.setUserID(userID);
+                Intent intent = new Intent(getApplicationContext(), matching.class);
+                startActivity(intent);
             }
         });
 
@@ -151,64 +214,9 @@ public class openMap extends AppCompatActivity
 
     }
 
-    //현재 위치 가져오는 함수
-    public void getMyLocation() {
-        manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        // 권한이 모두 허용되어 있을 때만 동작하도록 한다.
-        int chk1 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int chk2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (chk1 == PackageManager.PERMISSION_GRANTED && chk2 == PackageManager.PERMISSION_GRANTED) {
-            myLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            showMyLocation();
-        }
-        // 새롭게 위치를 측정한다.
-        openMap.GpsListener listener = new openMap.GpsListener();
-
-        if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, listener);
-        }
-        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, listener);
-        }
-
-    }
 
 
 
-    class GpsListener implements android.location.LocationListener {
-        @Override
-        public void onLocationChanged(Location location) {
-            // 현재 위치 값을 저장한다.
-            myLocation = location;
-            // 위치 측정을 중단한다.
-            manager.removeUpdates(this);
-            // 지도를 현재 위치로 이동시킨다.
-            showMyLocation();
-        }
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-    }
-
-    public void showMyLocation() {
-        // LocationManager.GPS_PROVIDER 부분에서 null 값을 가져올 경우를 대비하여 장치
-        if (myLocation == null) {
-            return;
-        }
-        // 현재 위치값을 추출한다.
-        lat = myLocation.getLatitude();
-        lng = myLocation.getLongitude();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onResume() {
 
@@ -331,15 +339,33 @@ public class openMap extends AppCompatActivity
         });
     }
 
-
+    //위치가 변경 될 때마다 호출되는 메소드임!
     @Override
     public void onLocationChanged(Location location) {
 
         currentPosition
                 = new LatLng( location.getLatitude(), location.getLongitude());
 
+        lng = location.getLongitude();
+        lat = location.getLatitude();
+
 
         Log.d(TAG, "onLocationChanged : ");
+
+
+        PolylineOptions polylineOptions;
+        ArrayList<LatLng> arrayPoints;
+
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(currentPosition);
+        mGoogleMap.addMarker(marker);
+
+        polylineOptions = new PolylineOptions();
+        polylineOptions.color(Color.RED);
+        polylineOptions.width(5);
+        //arrayPoints.add(currentPosition);
+        //polylineOptions.addAll(arrayPoints);
+        mGoogleMap.addPolyline(polylineOptions);
 
         String markerTitle = getCurrentAddress(currentPosition);
         String markerSnippet = "위도:" + String.valueOf(location.getLatitude())
@@ -519,7 +545,7 @@ public class openMap extends AppCompatActivity
         mMoveMapByUser = false;
 
 
-        //디폴트 위치=>임의로 서울로 설정함
+        //디폴트 위치, Seoul
         LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
         String markerTitle = "위치정보 가져올 수 없음";
         String markerSnippet = "위치 퍼미션과 GPS 활성 요부 확인하세요";
@@ -656,7 +682,7 @@ public class openMap extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(openMap.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
-                + "설정에서 위치정보를 수정해주세요.");
+                + "위치 설정을 수정하실래요?");
         builder.setCancelable(true);
         builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
             @Override
@@ -741,7 +767,7 @@ public class openMap extends AppCompatActivity
             //   URL 설정하고 접속하기
             //--------------------------
             //.php 수정하기
-            URL url = new URL("http://"+ci.getIP()+"/alarm.php");       // URL 설정
+            URL url = new URL("http://"+ci.getIP()+"/finduser.php");       // URL 설정
             HttpURLConnection http = (HttpURLConnection) url.openConnection();   // 접속
             //--------------------------
             //   전송 모드 설정 - 기본적인 설정이다
@@ -756,7 +782,7 @@ public class openMap extends AppCompatActivity
             //   서버로 값 전송
             //--------------------------
             StringBuffer buffer = new StringBuffer();
-            //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
+            buffer.append("id").append("=").append(myID).append("&");                 // php 변수에 값 대입
             //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
             buffer.append("latitude").append("=").append((float)lat).append("&");           // 변수 구분은 '&' 사용
             buffer.append("longitude").append("=").append((float)lng);
@@ -793,7 +819,38 @@ public class openMap extends AppCompatActivity
             while ((str = reader.readLine()) != null) {       // 서버에서 라인단위로 보내줄 것 라인단위로 읽는다
                 builder.append(str + "\n");                     // View에 표시하기 위해 라인 구
             }
+            res = builder.toString();
+            // ((TextView)(findViewById(R.id.textView2))).setText(res);
+            ci.setAlarm(bu);
 
+            final String match_id;
+            match_id  = ci.getAlarm();
+            Log.d("RESPONSE", "what is res : "+res);
+
+            Log.d("RESPONSE", "what is ci : "+ci.getAlarm());
+
+            if(match_id != NULL){
+                Log.d("RESPONSE", "what is alarm : "+match_id);
+                final String id[] = match_id.split(":");
+
+                new Thread(new Runnable() {
+                    @Override public void run() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+
+                                for (int i = 0; i < id.length; i++) {
+
+                                    // listview에 아이템 추가.
+                                    items.add(id[i]);
+                                    // listview 갱신
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+                        });
+                    }}).start();
+
+                ci.setAlarm(NULL);
+            }
 
         } catch (MalformedURLException e) {
             Log.d("RESPONSE", "TEX ");
@@ -816,6 +873,7 @@ public class openMap extends AppCompatActivity
 
 
 
-
 }
+
+
 

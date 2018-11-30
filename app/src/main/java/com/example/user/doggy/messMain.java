@@ -26,8 +26,9 @@ public class messMain extends Activity {    //메인 activity 시작!
     Button button, button2;          //화면구성
     TextView output;        //화면구성
     //
-    String data=null;
+    String data = null;
     connectInfo ci = new connectInfo();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {   //앱 시작시  초기화설정
         super.onCreate(savedInstanceState);
@@ -45,7 +46,7 @@ public class messMain extends Activity {    //메인 activity 시작!
                 //String data=null; //글자입력칸에 있는 글자를 String 형태로 받아서 data에 저장
 //버튼이 클릭되면 소켓에 데이터를 출력한다.
                 RadioGroup radioGroup = findViewById(R.id.messRadio);
-                int messNum=0;
+                int messNum = 0;
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.mr1:
                         messNum = 1;
@@ -68,21 +69,33 @@ public class messMain extends Activity {    //메인 activity 시작!
                         break;
 
                     case R.id.mr6:
-                        messNum = 5;
+                        messNum = 6;
                         break;
                 }
-                switch(messNum){
-                    case 1 : data="안녕하세요."; break;
-                    case 2 : data="산책 같이 하실래요?"; break;
-                    case 3 : data="좋아요."; break;
-                    case 4 : data="아니요."; break;
-                    case 5 : data="도착지점에서 뵐게요."; break;
-                    case 6 : data="산책 즐겁게 하세요!"; break;
+                switch (messNum) {
+                    case 1:
+                        data = "안녕하세요.";
+                        break;
+                    case 2:
+                        data = "산책 같이 하실래요?";
+                        break;
+                    case 3:
+                        data = "좋아요.";
+                        break;
+                    case 4:
+                        data = "아니요.";
+                        break;
+                    case 5:
+                        data = "도착지점에서 뵐게요.";
+                        break;
+                    case 6:
+                        data = "산책 즐겁게 하세요!";
+                        break;
                 } //서버와 연결되어 있지 않다면 전송불가..
 
                 Log.w("NETWORK", " " + data);
                 if (data != null) { //만약 데이타가 아무것도 입력된 것이 아니라면
-                    out.println(ci.getUserID()+" : "+data); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
+                    out.println(ci.getUserID() + " : " + data); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
                 }
             }
         });
@@ -94,7 +107,7 @@ public class messMain extends Activity {    //메인 activity 시작!
                     socket = new Socket("180.66.202.170", 8888); //소켓생성
                     out = new PrintWriter(socket.getOutputStream(), true); //데이터를 전송시 stream 형태로 변환하여                                                                                                                       //전송한다.
                     in = new BufferedReader(new InputStreamReader(
-                            socket.getInputStream(),"UTF-8")); //데이터 수신시 stream을 받아들인다.
+                            socket.getInputStream(), "UTF-8")); //데이터 수신시 stream을 받아들인다.
 
 
                 } catch (IOException e) {
@@ -107,7 +120,7 @@ public class messMain extends Activity {    //메인 activity 시작!
                         data = in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data 에 저장
                         output.post(new Runnable() {
                             public void run() {
-                                output.append(data+"\n"); //글자출력칸에 서버가 보낸 메시지를 받는다.
+                                output.append(data + "\n"); //글자출력칸에 서버가 보낸 메시지를 받는다.
                             }
                         });
                     }
