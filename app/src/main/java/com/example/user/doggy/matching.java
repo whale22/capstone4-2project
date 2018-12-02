@@ -197,6 +197,7 @@ public class matching extends AppCompatActivity {
             if(alarm != NULL){
                 Log.d("RESPONSE", "what is alarm : "+alarm);
                 final String information[] = alarm.split(":");
+                Log.d("RESPONSE", "what is id : "+id);
 
                 new Thread(new Runnable() {
                     @Override public void run() {
