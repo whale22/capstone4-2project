@@ -218,7 +218,7 @@ public class matching extends AppCompatActivity {
                                 textView6.setText(information[4]);
                                 final TextView textView7=(TextView)findViewById(R.id.weightText);
                                 textView7.setText(information[5]);
-                                final TextView textView8=(TextView)findViewById(R.id.idText);
+                                final TextView textView8=(TextView)findViewById(R.id.sizeText);
                                 textView8.setText(information[6]);
                                 final TextView textView9=(TextView)findViewById(R.id.characterText);
                                 textView9.setText(information[7]);
