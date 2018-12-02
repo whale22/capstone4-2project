@@ -6,6 +6,7 @@ public class connectInfo {
     private static String user_ID=null;
     private static int random;
     private static String name2;
+    private  static String partner_ID=null;
 
     public void setName(String name){
         name2 = name;
@@ -34,6 +35,14 @@ public class connectInfo {
         user_ID=ui;
     }
     public String getUserID(){
+        return user_ID;
+    }
+
+    public void setPartnerID(String ui){
+        ui=ui.split("<")[0];
+        user_ID=ui;
+    }
+    public String getPartnerID(){
         return user_ID;
     }
 }
