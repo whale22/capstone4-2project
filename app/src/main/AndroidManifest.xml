@@ -53,12 +53,15 @@
         <activity android:name=".community" />
         <activity android:name=".adddog" />
         <activity android:name=".extrafunction" />
-        <activity android:name=".commuWrite"/>
-        <activity android:name=".commentWrite"/>
+        <activity android:name=".commuWrite" />
+        <activity android:name=".commentWrite" />
         <activity
             android:name=".usermodify"
             android:label="@string/title_activity_usermodify"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".route_list" />
+        <activity android:name=".detailed_route" />
+        <activity android:name=".itemListActivity"></activity>
     </application>
 
 </manifest>

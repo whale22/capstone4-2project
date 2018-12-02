@@ -4,6 +4,19 @@ public class connectInfo {
     private static String IP;
     private static String alarm;
     private static String user_ID=null;
+    private static int random;
+    private static String name2;
+
+    public void setName(String name){
+        name2 = name;
+    }
+    public String getName(){return name2;}
+
+    public static void setRandom(int random){
+        connectInfo.random = random;
+    }
+    public static int getRandom(){return random;}
+
     public void setIP(String IP2){
         IP=IP2;
     }
