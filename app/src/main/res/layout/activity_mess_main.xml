@@ -4,10 +4,13 @@
 
     <LinearLayout android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
 
-    <TextView android:layout_height="286dp" android:layout_width="fill_parent" android:id="@+id/output"/>
+        <TextView
+            android:id="@+id/output"
+            android:layout_width="fill_parent"
+            android:layout_height="224dp" />
 
 
-    -<RadioGroup android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/messRadio" android:scrollbars="vertical">
+        <RadioGroup android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/messRadio" android:scrollbars="vertical">
 
     <RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/mr1" android:text="안녕하세요." android:layout_weight="1"/>
 
@@ -23,8 +26,15 @@
 
 </RadioGroup>
 
+        <EditText
+            android:id="@+id/messWrite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="보내실 메세지를 입력하세요" />
 
-    -<LinearLayout android:orientation="horizontal" android:layout_height="match_parent" android:layout_width="match_parent">
+    <LinearLayout android:orientation="horizontal" android:layout_height="match_parent" android:layout_width="match_parent">
 
     <Button android:layout_height="wrap_content" android:layout_width="196dp" android:id="@+id/buttonsend" android:text="전송"/>
 

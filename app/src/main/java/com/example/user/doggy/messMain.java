@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class messMain extends Activity {    //메인 activity 시작!
     EditText input;         //화면구성
     Button button, button2;          //화면구성
     TextView output;        //화면구성
+    EditText mess;
     //
     String data = null;
     connectInfo ci = new connectInfo();
@@ -39,6 +41,7 @@ public class messMain extends Activity {    //메인 activity 시작!
         button2 = (Button) findViewById(R.id.exitsend);
         output = (TextView) findViewById(R.id.output); // 글자출력칸을 찾는다.
         output.setMovementMethod(new ScrollingMovementMethod());
+        mess = (EditText) findViewById(R.id.messWrite);
 // 버튼을 누르는 이벤트 발생, 이벤트 제어문이기 때문에 이벤트 발생 때마다 발동된다. 시스템이 처리하는 부분이 무한루프문에
 //있더라도 이벤트가 발생하면 자동으로 실행된다.
         button.setOnClickListener(new OnClickListener() {
@@ -72,7 +75,9 @@ public class messMain extends Activity {    //메인 activity 시작!
                         messNum = 6;
                         break;
                 }
-                switch (messNum) {
+                if(mess.getText().toString()!=null) data=mess.getText().toString();
+                else
+                    switch (messNum) {
                     case 1:
                         data = "안녕하세요.";
                         break;
@@ -97,9 +102,15 @@ public class messMain extends Activity {    //메인 activity 시작!
                 if (data != null) { //만약 데이타가 아무것도 입력된 것이 아니라면
                     out.println(ci.getUserID() + " : " + data); //data를   stream 형태로 변형하여 전송.  변환내용은 쓰레드에 담겨 있다.
                 }
+                mess.setText("");
             }
         });
-
+        button2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                finish();
+            }
+        });
         Thread worker = new Thread() {    //worker 를 Thread 로 생성
             public void run() { //스레드 실행구문
                 try {
