@@ -55,7 +55,7 @@ public class matching extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
-        id = ci.getUserID();
+        id = ci.getPartnerID();
         Log.d("RESPONSE", "what is id : "+id);
 
 

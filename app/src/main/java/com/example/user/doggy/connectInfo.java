@@ -40,9 +40,9 @@ public class connectInfo {
 
     public void setPartnerID(String ui){
         ui=ui.split("<")[0];
-        user_ID=ui;
+        partner_ID=ui;
     }
     public String getPartnerID(){
-        return user_ID;
+        return partner_ID;
     }
 }
