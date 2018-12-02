@@ -6,8 +6,10 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -31,9 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.user.doggy.R;
-import com.example.user.doggy.connectInfo;
-import com.example.user.doggy.route_register;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -61,6 +60,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 
 public class register_map extends AppCompatActivity
@@ -68,6 +68,9 @@ public class register_map extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
+
+
 
 
     private GoogleApiClient mGoogleApiClient = null;
@@ -95,7 +98,6 @@ public class register_map extends AppCompatActivity
 
     TextView tv, tv3;
     ToggleButton tb;
-    EditText et;
 
     static String bu;
     connectInfo ci = new connectInfo();
@@ -106,6 +108,11 @@ public class register_map extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Random rand = new Random(System.currentTimeMillis());
+        int random = Math.abs(rand.nextInt(10000));
+
+        ci.setRandom(random);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -130,7 +137,7 @@ public class register_map extends AppCompatActivity
         tv = (TextView)findViewById(R.id.textView2);//위도
         tv3 = (TextView)findViewById(R.id.textView4);//경도
         tb = (ToggleButton)findViewById(R.id.toggle1);
-        et = (EditText)findViewById(R.id.et);//경로 이름
+        // et = (EditText)findViewById(R.id.et);//경로 이름
 
         //Button btn_finish = (Button)findViewById(R.id.btn_finish);
         //btn_finish.setOnClickListener(new View.OnClickListener(){
@@ -292,18 +299,25 @@ public class register_map extends AppCompatActivity
 
         MarkerOptions marker = new MarkerOptions();
         marker.position(currentPosition);
+
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.basic);
+        Bitmap b=bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b,50,50,false);
+        marker.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
         mGoogleMap.addMarker(marker);
 
-        polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.RED);
-        polylineOptions.width(5);
-        //arrayPoints.add(currentPosition);
-        //polylineOptions.addAll(arrayPoints);
-        mGoogleMap.addPolyline(polylineOptions);
+//        polylineOptions = new PolylineOptions();
+//        polylineOptions.color(Color.RED);
+//        polylineOptions.width(5);
+//        //arrayPoints.add(currentPosition);
+//        //polylineOptions.addAll(arrayPoints);
+//        mGoogleMap.addPolyline(polylineOptions);
 
         String markerTitle = getCurrentAddress(currentPosition);
         String markerSnippet = "위도:" + String.valueOf(location.getLatitude())
                 + " 경도:" + String.valueOf(location.getLongitude());
+
 
         //현재 위치에 마커 생성하고 이동
         setCurrentLocation(location, markerTitle, markerSnippet);
@@ -479,7 +493,7 @@ public class register_map extends AppCompatActivity
         markerOptions.title(markerTitle);
         markerOptions.snippet(markerSnippet);
         markerOptions.draggable(true);
-        //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.basic)));
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.basic)));
 
 
         currentMarker = mGoogleMap.addMarker(markerOptions);
@@ -709,6 +723,7 @@ public class register_map extends AppCompatActivity
     public void HttpPostData() {
         StringBuilder builder = new StringBuilder();
 
+
         try {
 
             Log.d("RESPONSE", "http://"+ci.getIP()+"/temproute.php");
@@ -731,7 +746,7 @@ public class register_map extends AppCompatActivity
             StringBuffer buffer = new StringBuffer();
             //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
             //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
-            buffer.append("name").append("=").append(et.getText().toString()).append("&");
+            buffer.append("random").append("=").append(ci.getRandom()).append("&");
             buffer.append("latitude").append("=").append(tv.getText().toString().substring(4)).append("&");
             buffer.append("longitude").append("=").append(tv3.getText().toString().substring(4));   // 변수 구분은 '&' 사용
 

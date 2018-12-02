@@ -24,7 +24,15 @@ public class function3 extends AppCompatActivity {
 
         });
 
+        Button registered_list = (Button)findViewById(R.id.registered_list);
+        registered_list.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(getApplicationContext(),route_list.class);
+                startActivity(intent);
+            }
 
+        });
 
         Button btn = (Button)findViewById(R.id.back);
         btn.setOnClickListener(new View.OnClickListener(){

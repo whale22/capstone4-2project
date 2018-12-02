@@ -199,7 +199,7 @@ public class openMap extends AppCompatActivity
                 userID = (String) parent.getItemAtPosition(position) ;
                 //mc.setId(userID);
                 Log.d("RESPONSE", "what is id : "+userID);
-                //ci.setUserID(userID);
+                ci.setUserID(userID);
                 Intent intent = new Intent(getApplicationContext(), matching.class);
                 startActivity(intent);
             }
