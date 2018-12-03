@@ -56,7 +56,6 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
         setContentView(R.layout.activity_login);
         findViewById(R.id.loginButton).setOnClickListener(this);
         findViewById(R.id.send).setOnClickListener(this);
-        findViewById(R.id.next).setOnClickListener(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -259,9 +258,6 @@ public class login extends AppCompatActivity implements View.OnClickListener, Go
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.next:
-                startActivity(new Intent(this,extrafunction.class));
-                break;
             case R.id.send:
                 startActivity(new Intent(this,register.class));
                 break;

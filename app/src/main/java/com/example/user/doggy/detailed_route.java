@@ -77,7 +77,7 @@ public class detailed_route extends FragmentActivity implements OnMapReadyCallba
 //
 //        //카메라를 서울 위치로 옮긴다.
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
-
+        int i =0;
         LatLng position = null;
         for(route_model model : routelist){
             Log.d("RESPONSE : ", "sizeof :" + routelist.size());
@@ -95,6 +95,8 @@ public class detailed_route extends FragmentActivity implements OnMapReadyCallba
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
             Log.d("RESPONSE : ", "message : " + 333);
             mMap.addMarker(markerOptions);
+            Log.d("RESPONSE : ", "roop : " + i);
+            i++;
 
         }
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position,17));

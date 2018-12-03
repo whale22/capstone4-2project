@@ -43,8 +43,8 @@ public class route_list extends AppCompatActivity {
     connectInfo ci = new connectInfo();
     route_list.BackgroundTask task;
     ArrayList<route_model> routelist = new ArrayList<>();
-    route_model model = new route_model();
-
+    route_model rm = new route_model();
+    static int random=0;
     //경로이름 보내기 위한 변수
     private String Data;
     private ArrayList<String> ArrData = new ArrayList<>();
@@ -97,8 +97,9 @@ public class route_list extends AppCompatActivity {
 
                 Log.d("RESPONSE", "what is name : "+ name);
 
-               int random = model.getRandom();
-
+                random = model.getRandom();
+                Log.d("RESPONSE", "what is random : "+ random);
+                ci.setRandom(random);
                 //아마 listview 모든 내용 긁어올 것 split 필요
 //                String route_name[] = item.split(";");
 //                route_model model = new route_model();
@@ -168,7 +169,7 @@ public class route_list extends AppCompatActivity {
                         model.setTime(id[1 + i*5]);
                         model.setDatetime(id[2 + i*5]);
                         model.setMemo(id[3 + i*5]);
-
+                       // model.setRandom(id[4 + i*5]);
                         //random값 서버에서 받아옴!
                         try{
                             int random = Integer.parseInt(id[4 + i*5]);

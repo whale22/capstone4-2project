@@ -13,10 +13,15 @@ public class route_model implements Serializable {
     private  float longitude=1.0f;
 
     public int getRandom(){return random;}
+    /*
+    public void setRandom(String random){
+        int random1 = Integer.parseInt(random);
+        this.random = random1;
+    }
+*/
     public void setRandom(int random){
         this.random = random;
     }
-
 
     public  float getLatitude() { return latitude;}
     public  void setLatitude(String latitude1){
