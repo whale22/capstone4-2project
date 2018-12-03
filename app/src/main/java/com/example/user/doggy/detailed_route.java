@@ -95,7 +95,7 @@ public class detailed_route extends FragmentActivity implements OnMapReadyCallba
             mMap.addMarker(markerOptions);
 
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position,17));
+       // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position,17));
         Log.d("RESPONSE : ", "message : " + 444);
 
 

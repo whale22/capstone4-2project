@@ -90,6 +90,9 @@ public class route_register extends AppCompatActivity {
             String str_Datetime = sdfNow.format(date);
             String timestamp = str_Datetime.substring(0,13);
             Log.d("RESPONSE","TIMESTAMP : " + str_Datetime);
+//            String str_Datetime1 = str_Datetime.split(" ")[0];//날짜
+//            String str_Datetime2 = str_Datetime.split(" ")[1];//시간
+//            str_Datetime = str_Datetime1.concat(str_Datetime2);
 
             //--------------------------
             //   URL 설정하고 접속하기
@@ -108,7 +111,7 @@ public class route_register extends AppCompatActivity {
             StringBuffer buffer = new StringBuffer();
             //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
             //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
-            buffer.append("random").append("=").append(ci.getRandom()).append("&");
+            buffer.append("random").append("=").append(0).append("&");
             buffer.append("name").append("=").append(name.getText().toString()).append("&");
             buffer.append("time").append("=").append(time.getText().toString()).append("&");   // 변수 구분은 '&' 사용
             buffer.append("datetime").append("=").append(str_Datetime).append("&");

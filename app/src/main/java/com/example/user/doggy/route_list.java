@@ -97,7 +97,7 @@ public class route_list extends AppCompatActivity {
 
                 Log.d("RESPONSE", "what is name : "+ name);
 
-                ci.setName(name);
+                ci.setRandom(0);
 
                 //아마 listview 모든 내용 긁어올 것 split 필요
 //                String route_name[] = item.split(";");

@@ -109,10 +109,10 @@ public class register_map extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Random rand = new Random(System.currentTimeMillis());
-        int random = Math.abs(rand.nextInt(10000));
-
-        ci.setRandom(random);
+//        Random rand = new Random(System.currentTimeMillis());
+//        int random = Math.abs(rand.nextInt(10000));
+//
+//        ci.setRandom(random);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
