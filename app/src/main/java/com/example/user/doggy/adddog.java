@@ -34,8 +34,6 @@ public class adddog extends AppCompatActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adddog);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();//액션바 숨기기
         findViewById(R.id.cancelButton).setOnClickListener(this);
         findViewById(R.id.send).setOnClickListener(this);
         //tv= findViewById(R.id.resultText);
