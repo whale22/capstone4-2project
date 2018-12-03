@@ -51,6 +51,8 @@ public class extrafunction extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extrafunction);
 
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();//액션바 숨기기
         Button btn = (Button)findViewById(R.id.gotofunc1);
         btn.setOnClickListener(new View.OnClickListener(){
             @Override

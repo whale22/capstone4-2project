@@ -746,7 +746,7 @@ public class register_map extends AppCompatActivity
             StringBuffer buffer = new StringBuffer();
             //buffer.append("id").append("=").append(myId).append("&");                 // php 변수에 값 대입
             //buffer.append("pword").append("=").append(myPWord).append("&");   // php 변수 앞에 '$' 붙이지 않는다
-            buffer.append("random").append("=").append(ci.getRandom()).append("&");
+            buffer.append("random").append("=").append(1).append("&");
             buffer.append("latitude").append("=").append(tv.getText().toString().substring(4)).append("&");
             buffer.append("longitude").append("=").append(tv3.getText().toString().substring(4));   // 변수 구분은 '&' 사용
 

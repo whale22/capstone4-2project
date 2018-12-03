@@ -131,7 +131,7 @@ public class messMain extends Activity {    //메인 activity 시작!
                         data = in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data 에 저장
                         output.post(new Runnable() {
                             public void run() {
-                                output.append(data + "\n"); //글자출력칸에 서버가 보낸 메시지를 받는다.
+                                if(data.split(" : ")[0].equals(ci.getPartnerID())||data.split(" : ")[0].equals(ci.getUserID())) output.append(data + "\n"); //글자출력칸에 서버가 보낸 메시지를 받는다.
                             }
                         });
                     }

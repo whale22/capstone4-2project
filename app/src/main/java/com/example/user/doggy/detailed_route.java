@@ -89,13 +89,13 @@ public class detailed_route extends FragmentActivity implements OnMapReadyCallba
             Log.d("RESPONSE : ", "message : " + 222);
             BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.basic);
             Bitmap b=bitmapdraw.getBitmap();
-            Bitmap smallMarker = Bitmap.createScaledBitmap(b,50,50,false);
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b,25,25,false);
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
             Log.d("RESPONSE : ", "message : " + 333);
             mMap.addMarker(markerOptions);
 
         }
-       // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position,17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position,17));
         Log.d("RESPONSE : ", "message : " + 444);
 
 

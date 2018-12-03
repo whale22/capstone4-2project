@@ -3,6 +3,7 @@ package com.example.user.doggy;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,9 @@ public class adddog extends AppCompatActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adddog);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();//액션바 숨기기
         findViewById(R.id.cancelButton).setOnClickListener(this);
         findViewById(R.id.send).setOnClickListener(this);
         //tv= findViewById(R.id.resultText);
