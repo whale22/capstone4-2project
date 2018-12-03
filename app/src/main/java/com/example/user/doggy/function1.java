@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -44,6 +46,8 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import android.support.v4.app.NotificationCompat;
 import android.app.NotificationManager;
@@ -95,7 +99,6 @@ public class function1 extends AppCompatActivity implements GoogleApiClient.Conn
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
-        final TextView tv_out_mylocation = (TextView) findViewById(R.id.tv_out_mylocation);
 
         // 위치 정보를 관리하는 매니저
         LocationManager manager;
@@ -105,9 +108,7 @@ public class function1 extends AppCompatActivity implements GoogleApiClient.Conn
             public void onClick(View v) {
                 task = new function1.BackgroundTask();
                 task.execute();
-                tv_out_mylocation.setText("위도 : " + lat + "\n");
-                tv_out_mylocation.append("경도 : " + lng);
-                Log.d("latitude", "latitude : "+lat);
+                getLocation(lat,lng);
             }
         });
 
@@ -135,6 +136,28 @@ public class function1 extends AppCompatActivity implements GoogleApiClient.Conn
             StrictMode.setThreadPolicy(policy);
 
         }
+
+    }
+
+    public void getLocation(double lat, double lng){
+        String str = null;
+        Geocoder geocoder = new Geocoder(this, Locale.KOREA);
+        TextView tv_out_mylocation = (TextView) findViewById(R.id.tv_out_mylocation);
+
+        List<Address> address;
+        try {
+            if (geocoder != null) {
+                address = geocoder.getFromLocation(lat, lng, 1);
+                if (address != null && address.size() > 0) {
+                    str = address.get(0).getAddressLine(0).toString();
+                }
+            }
+        } catch (IOException e) {
+            Log.e("MainActivity", "주소를 찾지 못하였습니다.");
+            e.printStackTrace();
+        }
+
+        tv_out_mylocation.setText(str);
 
     }
 
