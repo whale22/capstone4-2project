@@ -75,8 +75,7 @@ public class messMain extends Activity {    //메인 activity 시작!
                         messNum = 6;
                         break;
                 }
-                if(mess.getText().toString()!=null) data=mess.getText().toString();
-                else
+
                     switch (messNum) {
                     case 1:
                         data = "안녕하세요.";
@@ -97,6 +96,7 @@ public class messMain extends Activity {    //메인 activity 시작!
                         data = "산책 즐겁게 하세요!";
                         break;
                 } //서버와 연결되어 있지 않다면 전송불가..
+                if(mess.getText().toString().length()>0) data=mess.getText().toString();
 
                 Log.w("NETWORK", " " + data);
                 if (data != null) { //만약 데이타가 아무것도 입력된 것이 아니라면
