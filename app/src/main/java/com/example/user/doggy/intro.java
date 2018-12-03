@@ -13,8 +13,6 @@ public class intro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();//액션바 숨기기
 
                 //3초 후 인트로 액티비티 제거
                 Handler handler = new Handler();

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,10 +50,10 @@ public class extrafunction extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_extrafunction);
 
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();//액션바 숨기기
         Button btn = (Button)findViewById(R.id.gotofunc1);
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
