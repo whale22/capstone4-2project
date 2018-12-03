@@ -39,7 +39,6 @@
         <activity android:name=".function1" />
         <activity android:name=".function3" />
         <activity android:name=".login" />
-        <activity android:name=".Main2Activity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".MapsActivity" />
         <activity android:name=".messMain" />

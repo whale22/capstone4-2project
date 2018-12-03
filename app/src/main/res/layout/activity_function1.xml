@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:text="현위치" />
+        android:text="알림정보" />
 
     <TextView
         android:layout_width="306dp"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
 
-        android:text="지도" />
+        android:text="매칭" />
 
     <Button
         android:layout_width="wrap_content"

@@ -176,21 +176,11 @@ public class openMap extends AppCompatActivity
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int count, checked ;
-                count = adapter.getCount() ;
-
-                if (count > 0) {
-                    // 현재 선택된 아이템의 position 획득.
-                    checked = listview.getCheckedItemPosition();
-
-                    if (checked > -1 && checked < count) {
-                        Intent intent = new Intent(getApplicationContext(), matching.class);
-                        startActivity(intent);
-                    }
-                }
-
+                Intent intent = new Intent(getApplicationContext(), function1.class);
+                startActivity(intent);
             }
         });
+
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

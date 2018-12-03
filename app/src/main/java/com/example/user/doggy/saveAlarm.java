@@ -136,7 +136,7 @@ public class saveAlarm extends AppCompatActivity implements GoogleApiClient.Conn
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                Intent intent = new Intent(getApplicationContext(), extrafunction.class);
                 startActivity(intent);
             }
         });
@@ -350,7 +350,7 @@ public class saveAlarm extends AppCompatActivity implements GoogleApiClient.Conn
         //정보가 있으면 다음으로 아니면 toast
         if (flag == 1) {
             Toast.makeText(saveAlarm.this, "알림정보가 입력되었습니다!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, Main2Activity.class));
+            startActivity(new Intent(this, extrafunction.class));
             flag = 0;
             this.finish();
         } else {

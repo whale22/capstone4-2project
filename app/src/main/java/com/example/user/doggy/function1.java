@@ -125,7 +125,7 @@ public class function1 extends AppCompatActivity implements GoogleApiClient.Conn
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                Intent intent = new Intent(getApplicationContext(), extrafunction.class);
                 startActivity(intent);
             }
         });
