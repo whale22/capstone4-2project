@@ -8,8 +8,14 @@ public class route_model implements Serializable {
     private  String time;
     private  String memo;
     private  String datetime;
+    private int random;
     private  float latitude=1.0f;
     private  float longitude=1.0f;
+
+    public int getRandom(){return random;}
+    public void setRandom(int random){
+        this.random = random;
+    }
 
 
     public  float getLatitude() { return latitude;}

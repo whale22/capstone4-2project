@@ -50,6 +50,8 @@ public class detailed_route extends FragmentActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_route);
 
+        //model.getRandom();
+
         task = new detailed_route.BackgroundTask();
         task.execute();
 

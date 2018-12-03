@@ -97,7 +97,7 @@ public class route_list extends AppCompatActivity {
 
                 Log.d("RESPONSE", "what is name : "+ name);
 
-                ci.setRandom(1);
+               int random = model.getRandom();
 
                 //아마 listview 모든 내용 긁어올 것 split 필요
 //                String route_name[] = item.split(";");
@@ -150,7 +150,7 @@ public class route_list extends AppCompatActivity {
 
                     String id[] = str.split(";");
 
-                    for(int i =0;i<id.length/4;i++){
+                    for(int i =0;i<id.length/5;i++){
                         builder.append(str + "\n");
                         Log.d("RESPONSE","It is Okay");
 
@@ -158,18 +158,25 @@ public class route_list extends AppCompatActivity {
                         Log.d("RESPONSE","id[1] : " + id[1]);
                         Log.d("RESPONSE","id[2] : " + id[2]);
                         Log.d("RESPONSE","id[3] : " + id[3]);
+                        Log.d("RESPONSE","id[4] :"  + id[4]);
 
 
 
 
                         route_model model = new route_model();
-                        model.setName(id[0 + i*4]);
-                        model.setTime(id[1 + i*4]);
-                        model.setDatetime(id[2 + i*4]);
-                        model.setMemo(id[3 + i*4]);
+                        model.setName(id[0 + i*5]);
+                        model.setTime(id[1 + i*5]);
+                        model.setDatetime(id[2 + i*5]);
+                        model.setMemo(id[3 + i*5]);
 
-//                        String name = model.getName();
-//                        ci.setName(name);
+                        //random값 서버에서 받아옴!
+                        try{
+                            int random = Integer.parseInt(id[4 + i*5]);
+                            model.setRandom(random);
+                        }
+                        catch(NumberFormatException NFE){
+
+                        }
 
                         routelist.add(model);
 
